@@ -142,9 +142,13 @@ grid.arrange(tornadoes_plot, deaths_plot, ncol = 2)
 ```
 
 
-Working on revisions:
+Working on suggestions from Dr. Mine Çentinkaya:
 
-Flipping the coordinates ... twikking the scale a bit ... and removing unnecessary labels and adding more descriptive ones ... and 
+In the graph below, I flipped the axes to have a horizontal bar graph that is
+better visually and is easier to read. Besides the axes, I also removed 
+unnecessary labels on the now y-axis (after flipping) and added more descriptive 
+labels on the now x-axis. It is the graph of Perentage of Tornadoes by Scale.
+
 ```{r}
 tornadoes_plot1 = ggplot(tornadoes, aes(x = EF)) +
   geom_bar(aes(y = ..prop..), stat="count", position = position_dodge(),
@@ -161,87 +165,43 @@ tornadoes_plot1 = ggplot(tornadoes, aes(x = EF)) +
 tornadoes_plot1
 ```
 
+
+The graph below is also horizontal but has all the labels on the axes and
+does not have percentages on the individual bars. It is the graph of Counts
+of Tornadoe-related Deaths by Scale. This is a bar graph of two variables 
+(as opposed to one variable vs counts of tornadoes in the previsous one)
+so it is hard to get the y-axis to behave the same as that in the previous  
+graph. So I will leave it like that for now.
+
 ```{r}
 tornadoes_plot2 = ggplot(data = tornadoes) + 
 geom_bar(aes(x = EF, y = fat), stat="identity", fill = "maroon") +
-#geom_text(aes(x = EF, y = fat, label=EF), hjust=0) +
 scale_x_continuous(breaks = c(0,1,2,3,4,5),
                    labels = c("EF0", "EF1", "EF2", "EF3", "EF4", "EF5")) +
-labs(title = "Counts of Tornadoes-related Deaths by \n Scale", x = NULL, y = NULL) +
+labs(title = "Counts of Tornadoe-related Deaths by \n Scale", x = NULL, y = NULL) +
 scale_y_continuous(limits = c(0,2500)) +
 theme_light() +
 theme(plot.title = element_text(hjust = 0.5)) +
 coord_flip()
 ```
 
+It was suggested that I plot EF agains death rate (number of deaths per tornado)
+to get a different graph. I was not able to do this. The variable fat in the
+dataset is the number of deaths per tornado, so it is already a death rate. That
+way, the graph below is already a distribution of tornado scale by death rate.
+
+I tried different ways to show the relationship between EF and death keeping in
+in mind all the suggestions, and I have not found one that looks better than the
+one below. The ones I have tried looked very weird and hard to interpret. I also
+tried to find a way to put the the information in the piecharts in one graph and
+this was not successful too.
+
+So given the challenges, I decided to just leave both graphs as horizontal bar
+charts for now. Below, the graphs are presented side by side. One can see that 
+as the intensity of a tornado increases (on the left), number of tornadoes decreases,
+but the number of deaths by tornadoes increases. This is what the two piecharts
+were trying to show, but now on bar graphs.
+
 ```{r}
 grid.arrange(tornadoes_plot1, tornadoes_plot2, ncol = 2)
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-```{r}
-ggplot(data = tornadoes) + geom_point(mapping = aes(y = EF, x = fat))
-```
-
-```{r}
-beeswarm(fat ~ EF, data = tornadoes, 
-  log = TRUE, pch = 16, col = rainbow(8),
-  main = 'beeswarm')
-```
-
-
-```{r}
-ggplot(data = tornadoes) + 
-  geom_point(mapping = aes(x = EF, y = fat, size = count(EF))
-```
-
-
-tornadoes %>%
-  mutate (fat = (fat/sum(fat))*100) %>%
-
-ggplot(data = .) + 
-geom_bar(aes(x = EF, y = fat), stat="identity", position = position_dodge(),
-fill = "maroon") +
-geom_text(aes(label = scales::percent(round(fat,3)), x = EF, y = fat), hjust = -.9) + 
-scale_y_continuous(breaks = NULL) +
-
-scale_x_continuous(breaks = c(0,1,2,3,4,5),
-                   labels = c("EF0", "EF1", "EF2", "EF3", "EF4", "EF5")) +
-labs(title = "Percentage of Tornadoes-related Deaths by Scale", x = NULL, y = NULL) +
-theme_light() +
-theme(plot.title = element_text(hjust = 0.5)) +
-coord_flip()
