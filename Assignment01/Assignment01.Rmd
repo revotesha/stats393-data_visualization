@@ -1,0 +1,22 @@
+---
+title: "FEMMES: Data Visualization Workshop"
+author: "Revo Tesha & Sibora Seranaj"
+date: "2/17/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(googlesheets)
+```
+
+```{r}
+gs_auth(new_user = TRUE)
+```
+
+If you want to know what is in your google account use gs_ls()
+
+```{r}
+quest_res <- gs_title("Questionnaire Responses")
+quest_res
+```
