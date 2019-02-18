@@ -1,22 +1,35 @@
 ---
-title: "FEMMES: Data Visualization Workshop"
+title: "FEMMES Data Visualization Workshop"
 author: "Revo Tesha & Sibora Seranaj"
 date: "2/17/2019"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message=F}
 knitr::opts_chunk$set(echo = TRUE)
 library(googlesheets)
 ```
 
-```{r}
+Gmail login info:
+
+email - femmesworkshop2019@gmail.com
+password - femmes2019
+
+```{r, include=F}
 gs_auth(new_user = TRUE)
 ```
 
-If you want to know what is in your google account use gs_ls()
+To see what's in your google drive use gs_ls().
 
-```{r}
-quest_res <- gs_title("Questionnaire Responses")
-quest_res
+```{r, include=F}
+quest_res_list <- gs_title("Femmes Questionnaire Responses")
+quest_res_df <- for_gs_sheet <- gs_read(quest_res_list)
 ```
+
+Changing column names:
+```{r}
+names(quest_res_df) = c("time_stamp", "num_siblings", "fav_color", "height", "shoe_size", "movie_genre", "fav_chocolate", "fav_pet", "fav_season", "fav_num")
+#View(quest_res_df)
+```
+
+
