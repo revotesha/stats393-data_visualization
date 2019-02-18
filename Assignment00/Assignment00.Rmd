@@ -205,3 +205,51 @@ were trying to show, but now on bar graphs.
 ```{r}
 grid.arrange(tornadoes_plot1, tornadoes_plot2, ncol = 2)
 ```
+
+
+### Edit (February 11):
+
+I was able to figure out how to show all the information in one chart. I grouped
+deaths by EF scale, calculated mean deaths for each scale and plotted EF 
+scale against the mean. This seems like it is what a previous suggestion about
+plotting EF vs death rate meant. Below is the graph.
+
+```{r}
+tornadoes %>%
+  
+  group_by(EF) %>%
+  summarize(mean_deaths_per_sc = mean(fat)) %>%
+  
+  ggplot(data = .) +
+  geom_bar(aes(x = EF, y = mean_deaths_per_sc), stat = "identity", fill = "maroon") +
+  labs(x = "EF Scale", y = "Deaths per EF Scale", title = "Deaths by Scale") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous(breaks = c(0,1,2,3,4,5),
+                     labels = c("EF0", "EF1", "EF2", "EF3", "EF4", "EF5"))
+```
+
+
+
+
+
+
+```{r}
+ggplot(data = tornadoes) +
+  geom_boxplot(aes(x = EF, y = fat, group = EF)) +
+  labs(x = "EF Scale", y = "Deaths", title = "Deaths by Scale") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous(breaks = c(0,1,2,3,4,5),
+                     labels = c("EF0", "EF1", "EF2", "EF3", "EF4", "EF5"))
+```
+
+
+Actaully these two still do not show both info. The last one though shows both deaths per scale and mean of deaths for each
+scale - that is, the expecation of number of deaths if an EF 5 hits is about 20 (which is also what the previous one means). 
+
+
+
+
+
+
