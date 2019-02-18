@@ -1,0 +1,207 @@
+---
+title: "Assignment00"
+author: "Revo Tesha"
+date: "1/31/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(scales)
+library(gridExtra)
+library(readxl) # It is a tidyverse package, but not a core package. So need to 
+#load it separately.
+library(beeswarm)
+```
+
+In this assingment, I will be working to create what I think is a better 
+visualization for a dataset. The dataset I will be working with is a record of
+tornadoes that have happened in the United States between 1950 and 2015. 
+The name of the dataset is 'tornadoes'. The original dataset (linked below) 
+contains more variables that are not relevent for this assignment.
+
+Link to riginal data: https://oasishub.co/dataset/usa-tornado-historical-tracks
+-noaa/resource/b2a11100-eac5-4d10-869a-87ba064ede2d
+
+The original visualization of part of this data is two piecharts; one shows the
+distribution of the tornadoes by scale and the other shows the distribution of 
+tornado-related deaths, also by tornado scale. The piecharts were used by 
+'Tornado Project Online' to show that, although tornadoes of scales 4 and 5 are 
+rare, they cause more deaths than all the other tornadoes combined.
+
+Link to the charts: http://www.tornadoproject.com/cellar/fscale.htm 
+
+Below are screenshots of the piecharts as they appeared on the site on 
+February 7, 2019.
+
+```{r}
+knitr::include_graphics("tornadoesImage01.png", dpi = NA)
+```
+
+```{r}
+knitr::include_graphics("tornadoesImage02.png", dpi = NA)
+```
+
+The tornado scale used here is the Enhanced Fujita (EF) scale. The EF scale is
+based on the damage the tornado causes and it ranges from 0 to 5, with 5 being 
+the most violent tornadoes. According to the National Weather Service of the
+United  States, the scale of a tornado is determined by first identifying the 
+appropriate  damage indicators from a list of 28. For a given indicator,
+the degree of  damage is determined from a list of 8. Each degree of damage 
+is assigned a  range of wind speed, and it is from these ranges that the scale
+is finally decided.
+
+The reason I decided to create a better way to visualize the distribution of
+tornadoes and tornado-ralated deaths is because (1) I find it unnessary to use 
+3-D (AND exploded) piecharts and I think a regular one-dimensional piechart is
+better but (2) in general, piecharts can be confusing to interpret and they 
+don't always present the data in an easily digestible way - it can be hard to 
+keep track of the labels (often there is labelling for percentages and for the 
+different groups involved) and seeing the relationship between the different 
+size of the pieces  of the chart and the groups. 
+
+My idea of a better visualization is the use of a bar graph. Below is one that 
+shows the percentage of tornadoes by scale.
+```{r}
+#loading the data.
+tornadoes <- read_excel("tornadoes.xls")
+```
+```{r}
+ggplot(data = tornadoes) + geom_bar(aes(x = EF))
+```
+
+The bar graph above has count on the y-axis. The one below has percentages - 
+this will make it easier to see the distribution of the different tornadoes 
+as far as scale is concerned.
+
+```{r}
+ggplot(data = tornadoes) + 
+  geom_bar(mapping = aes(x = EF, y = ..prop..)) + 
+  scale_y_continuous(labels=scales::percent) + 
+  ylab("Percentage") 
+```
+
+To make it even easier to see the distribution, I will add percentages at the 
+top of the individual bars. See below.
+```{R}
+ggplot(tornadoes, aes(x = EF)) + 
+  geom_bar(aes(y = ..prop..), stat="count", position = position_dodge()) +
+  geom_text(aes(label = scales::percent(round(..prop..,3)), y = ..prop..), 
+  stat = "count", vjust = -.2, position = position_dodge(.9)) +
+  scale_y_continuous(labels = scales::percent) + ylab("Percentage")
+```
+
+Now I will give the graph a title, more descriptive axes labels and some colors
+to make it more visually appealing.
+
+```{R}
+tornadoes_plot = ggplot(tornadoes, aes(x = EF)) + 
+  geom_bar(aes(y = ..prop..), stat="count", position = position_dodge(),
+  fill = "maroon") +
+  geom_text(aes(label = scales::percent(round(..prop..,3)), y = ..prop..), 
+  stat= "count", vjust = -.2, position =     position_dodge(.9)) +
+  scale_y_continuous(labels = scales::percent) + 
+  ylab("Percentage") + 
+  labs(title = "Percentage of Tornadoes by Scale", x = "Scale (0 - 5)") + 
+  theme_light() + 
+  theme(plot.title = element_text(hjust = 0.5))
+tornadoes_plot
+```
+
+To visualize the percentage of tornado-related deaths, I will first create a
+table that groups deaths by EF scales. I will then use this table to create a 
+scatter plot of EF scale vs deaths.
+
+```{r}
+deaths = tornadoes %>% group_by(EF) %>% summarise(deaths = sum(fat))
+deaths
+```
+
+```{r}
+deaths_plot = ggplot(deaths, aes(x = EF, y = deaths)) + 
+  geom_count() + 
+  theme_light() + 
+  labs(title = "Deaths vs. Scale", x = "Scale (0 - 5)") + 
+  theme(legend.position = "none") + 
+  theme(plot.title = element_text(hjust = 0.5))
+deaths_plot
+```
+
+Below are the two graphs plotted side by side. On the left (percentage of
+tornadoes by scale), it can be seen that as the scale increases, the number of
+tornadoes decreases. On the right (deaths vs scale), it can be seen that, in
+general, deaths increase with scale. I think it is now easier to actually
+visualize the trend for both graphs - one can see an increase or a decrease and
+does not have to always have to keep track of labels to be able to understand 
+what is happening (once one sees the the graphs, they don't need to keep
+going back to the labels to understand the graphs).
+
+```{r}
+grid.arrange(tornadoes_plot, deaths_plot, ncol = 2)
+```
+
+
+Working on suggestions from Dr. Mine Çentinkaya:
+
+In the graph below, I flipped the axes to have a horizontal bar graph that is
+better visually and is easier to read. Besides the axes, I also removed 
+unnecessary labels on the now y-axis (after flipping) and added more descriptive 
+labels on the now x-axis. It is the graph of Perentage of Tornadoes by Scale.
+
+```{r}
+tornadoes_plot1 = ggplot(tornadoes, aes(x = EF)) +
+  geom_bar(aes(y = ..prop..), stat="count", position = position_dodge(),
+  fill = "maroon") +
+  geom_text(aes(label = scales::percent(round(..prop..,3)), y = ..prop..),
+  stat= "count", hjust = -.1, position = position_dodge(0.9)) +
+  scale_y_continuous(labels = scales::percent, limits = c(0,0.5), breaks = NULL) +
+  scale_x_continuous(breaks = c(0,1,2,3,4,5),
+                   labels = c("EF0", "EF1", "EF2", "EF3", "EF4", "EF5")) +
+  labs(title = "Percentage of Tornadoes by Scale", x = NULL, y = NULL) +
+  theme_light() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_flip()
+tornadoes_plot1
+```
+
+
+The graph below is also horizontal but has all the labels on the axes and
+does not have percentages on the individual bars. It is the graph of Counts
+of Tornadoe-related Deaths by Scale. This is a bar graph of two variables 
+(as opposed to one variable vs counts of tornadoes in the previsous one)
+so it is hard to get the y-axis to behave the same as that in the previous  
+graph. So I will leave it like that for now.
+
+```{r}
+tornadoes_plot2 = ggplot(data = tornadoes) + 
+geom_bar(aes(x = EF, y = fat), stat="identity", fill = "maroon") +
+scale_x_continuous(breaks = c(0,1,2,3,4,5),
+                   labels = c("EF0", "EF1", "EF2", "EF3", "EF4", "EF5")) +
+labs(title = "Counts of Tornadoe-related Deaths by \n Scale", x = NULL, y = NULL) +
+scale_y_continuous(limits = c(0,2500)) +
+theme_light() +
+theme(plot.title = element_text(hjust = 0.5)) +
+coord_flip()
+```
+
+It was suggested that I plot EF agains death rate (number of deaths per tornado)
+to get a different graph. I was not able to do this. The variable fat in the
+dataset is the number of deaths per tornado, so it is already a death rate. That
+way, the graph below is already a distribution of tornado scale by death rate.
+
+I tried different ways to show the relationship between EF and death keeping in
+in mind all the suggestions, and I have not found one that looks better than the
+one below. The ones I have tried looked very weird and hard to interpret. I also
+tried to find a way to put the the information in the piecharts in one graph and
+this was not successful too.
+
+So given the challenges, I decided to just leave both graphs as horizontal bar
+charts for now. Below, the graphs are presented side by side. One can see that 
+as the intensity of a tornado increases (on the left), number of tornadoes decreases,
+but the number of deaths by tornadoes increases. This is what the two piecharts
+were trying to show, but now on bar graphs.
+
+```{r}
+grid.arrange(tornadoes_plot1, tornadoes_plot2, ncol = 2)
+```
