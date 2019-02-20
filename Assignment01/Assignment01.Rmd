@@ -8,6 +8,7 @@ output: html_document
 ```{r setup, include=FALSE, message=F}
 knitr::opts_chunk$set(echo = TRUE)
 library(googlesheets)
+library(tidyverse)
 ```
 
 Gmail login info:
@@ -32,4 +33,20 @@ names(quest_res_df) = c("time_stamp", "num_siblings", "fav_color", "height", "sh
 #View(quest_res_df)
 ```
 
+#### Correlation between shoe number and number of siblings? Too much?
 
+```{r}
+ggplot(quest_res_df) + 
+  geom_point(aes(x = num_siblings, y = shoe_size)) + 
+  labs(x = "Number of Siblings", y = "Shoe Size")
+```
+
+#### Favorite season
+
+```{r}
+ggplot(quest_res_df) + 
+  geom_bar(aes(x = fav_season)) +
+  labs(x = "Favorite Season")
+```
+
+#### etc
