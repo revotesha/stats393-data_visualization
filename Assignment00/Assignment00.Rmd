@@ -13,6 +13,7 @@ library(gridExtra)
 library(readxl) # It is a tidyverse package, but not a core package. So need to 
 #load it separately.
 library(beeswarm)
+library(ggthemes)
 ```
 
 In this assingment, I will be working to create what I think is a better 
@@ -183,6 +184,7 @@ scale_y_continuous(limits = c(0,2500)) +
 theme_light() +
 theme(plot.title = element_text(hjust = 0.5)) +
 coord_flip()
+tornadoes_plot2
 ```
 
 It was suggested that I plot EF agains death rate (number of deaths per tornado)
@@ -222,16 +224,13 @@ tornadoes %>%
   
   ggplot(data = .) +
   geom_bar(aes(x = EF, y = mean_deaths_per_sc), stat = "identity", fill = "maroon") +
-  labs(x = "EF Scale", y = "Deaths per EF Scale", title = "Deaths by Scale") +
+  labs(x = "EF Scale", y = "Deaths per EF Scale", title = "Average Deaths by Scale") +
   theme_classic() +
   theme(plot.title = element_text(hjust = 0.5)) +
   scale_x_continuous(breaks = c(0,1,2,3,4,5),
-                     labels = c("EF0", "EF1", "EF2", "EF3", "EF4", "EF5"))
+                     labels = c("EF0", "EF1", "EF2", "EF3", "EF4", "EF5")) +
+  coord_flip()
 ```
-
-
-
-
 
 
 ```{r}
@@ -245,11 +244,45 @@ ggplot(data = tornadoes) +
 ```
 
 
-Actaully these two still do not show both info. The last one though shows both deaths per scale and mean of deaths for each
-scale - that is, the expecation of number of deaths if an EF 5 hits is about 20 (which is also what the previous one means). 
+Actaully these two still do not show both info. The last one though shows both 
+deaths per scale and mean of deaths for each scale - that is, the expecation of 
+number of deaths if an EF 5 hits is about 20 (which is also what the previous 
+one means). 
 
 
+```{r}
+tornadoes_left = ggplot(data = tornadoes) + 
+  geom_bar(mapping = aes(x = EF), fill = "black") + 
+  scale_y_continuous(trans = "reverse") + 
+  labs(title = "Tornado Count by Scale", y = "Tornado Count", x = NULL) + 
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank()) +
+  coord_flip()
+```
 
+
+```{r}
+tornadoes_right <- tornadoes %>%
+  group_by(EF) %>%
+  summarize(mean_deaths_per_sc = mean(fat)) %>%
+  
+  ggplot(data = .) +
+  geom_bar(aes(x = EF, y = mean_deaths_per_sc), stat = "identity", fill = "red") +
+  labs(x = NULL, y = "Deaths per EF Scale", title = "Average Deaths by Scale") +
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.ticks.y = element_blank()) +
+  scale_x_continuous(breaks = c(0,1,2,3,4,5),
+                     labels = c("EF0   ", "EF1   ", "EF2   ", "EF3   ", "EF4   ", "EF5   ")) +
+  coord_flip()
+```
+
+Merge:
+
+```{r}
+grid.arrange(tornadoes_left, tornadoes_right, ncol = 2)
+```
 
 
 

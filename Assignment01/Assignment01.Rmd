@@ -29,7 +29,7 @@ quest_res_df <- for_gs_sheet <- gs_read(quest_res_list)
 
 Changing column names:
 ```{r}
-names(quest_res_df) = c("time_stamp", "num_siblings", "fav_color", "height", "shoe_size", "movie_genre", "fav_chocolate", "fav_pet", "fav_season", "fav_num")
+names(quest_res_df) = c("time_stamp", "num_siblings", "fav_color", "height", "shoe_size", "movie_genre", "fav_chocolate", "fav_pet", "fav_season", "fav_num", "reaction", "day_old")
 #View(quest_res_df)
 ```
 
@@ -48,5 +48,15 @@ ggplot(quest_res_df) +
   geom_bar(aes(x = fav_season)) +
   labs(x = "Favorite Season")
 ```
+
+#### idea for reaction time 
+since kids are recording 5 different reaction time trials, I want to see if there is a trend between the reaction time and the number of trials. For example, I noticed that the first trial I did pretty bad, second one I improved and I kept improving but the last two scores were similar.
+
+```{r}
+ggplot(quest_res_df) + 
+  geom_bar(aes(x = fav_chocolate)) +
+  labs(x = "Favorite Chocolate")
+```
+
 
 #### etc
