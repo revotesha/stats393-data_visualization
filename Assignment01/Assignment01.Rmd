@@ -29,38 +29,60 @@ quest_res_df <- for_gs_sheet <- gs_read(quest_res_list)
 
 Changing column names:
 ```{r}
-names(quest_res_df) = c("time_stamp", "num_siblings", "fav_color", "height", "shoe_size", "movie_genre", "fav_chocolate", "fav_pet", "fav_season", "fav_num", "reaction", "day_old")
-#View(quest_res_df)
+names(quest_res_df) = c("time_stamp", "num_siblings", "fav_color", "height", "shoe_size", "movie_genre", "fav_chocolate", "fav_pet", "fav_season", "day_old", "reaction_one", "reaction_two", "reaction_three", "reaction_four")
+View(quest_res_df)
 ```
 
-#### Correlation between shoe number and number of siblings? Too much?
+#### Correlation between shoe number and number of siblings?
 
 ```{r}
 ggplot(quest_res_df) + 
   geom_point(aes(x = num_siblings, y = shoe_size)) +
-  labs(title = "Relationship Betweenn Shoe Size and Number of Siblings?", x = "Number of Siblings", y = "Shoe Size") + 
-  theme()
+  labs(title = "Any Relationship Between Shoe Size and Number of Siblings?", x = "Number of Siblings", y = "Shoe Size") + 
+  theme_economist() +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
-#### Favorite season
+#### Correlations between shoe size and height?
 
 ```{r}
 ggplot(quest_res_df) + 
-  geom_bar(aes(x = fav_season)) +
-  labs(x = "Favorite Season")
+  geom_point(aes(x = shoe_size, y = height)) +
+  labs(title = "Any Relationship Between Shoe Size and Height?", x = "Shoe Size", y = "Height") +
+  theme_economist() +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+#### Your Favorite Color:
+
+```{r}
+
+color_pallete <- c(
+  "Red" = "red",
+  "Blue" = "blue",
+  "Green" = "green",
+  "Pink" = "pink",
+  "Other" = "gray88" # maybe something else here?
+)
+
+ggplot(quest_res_df) + 
+  geom_bar(aes(x = fav_color, fill = fav_color)) +
+  labs(x = "Color", title = "Your Favorite Color") +
+  theme_economist() +
+  theme(legend.position = "right",
+        legend.title = element_text(face="bold"),
+        plot.title = element_text(hjust = 0.5)) +
+  scale_fill_manual(
+    values = color_pallete,
+    limits = names(color_pallete))
 ```
 
 #### idea for reaction time 
 since kids are recording 5 different reaction time trials, I want to see if there is a trend between the reaction time and the number of trials. For example, I noticed that the first trial I did pretty bad, second one I improved and I kept improving but the last two scores were similar.
 
-```{r}
-ggplot(quest_res_df) + 
-  geom_bar(aes(x = fav_chocolate)) +
-  labs(x = "Favorite Chocolate")
-```
 
-#### etc
-
+Not done:
 - gganimate for the reaction times.
-- change bar colors e.g. have chocolate types matched with different colors. And the favorite colors one - color by color.
-- online shiny course.
+
+
+
