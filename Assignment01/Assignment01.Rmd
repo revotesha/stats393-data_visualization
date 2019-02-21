@@ -82,8 +82,8 @@ ggplot(quest_res_df) +
 ```{r}
 color_pallete <- c(
   "White chocolate" = "papayawhip",
-  "I don't like chocolate" = "indianred1", #arbitrary
-  "Milk chocolate" = "saddlebrown",
+  "I don't like chocolate 😬" = "indianred1", #arbitrary
+  "Milk chocolate" = "tan3",
   "Dark chocolate" = "chocolate4"
 )
 
