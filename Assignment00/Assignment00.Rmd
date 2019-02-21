@@ -21,7 +21,7 @@ tornadoes that have happened in the United States between 1950 and 2015.
 The name of the dataset is 'tornadoes'. The original dataset (linked below) 
 contains more variables that are not relevent for this assignment.
 
-Link to riginal data: https://oasishub.co/dataset/usa-tornado-historical-tracks
+Link to original data: https://oasishub.co/dataset/usa-tornado-historical-tracks
 -noaa/resource/b2a11100-eac5-4d10-869a-87ba064ede2d
 
 The original visualization of part of this data is two pie charts; one shows the
