@@ -89,7 +89,7 @@ color_pallete <- c(
 
 ggplot(quest_res_df) + 
   geom_bar(aes(x = fav_chocolate, fill = fav_chocolate)) +
-  labs(x = "Favorite Chocolate" , title = "Number of students who prefer a certain type of chocolate") +
+  labs(x = "Chocolate Type" , title = "Your Favorite Chocolate") +
   theme(legend.position = "right",
         legend.title = element_text(face="bold"),
         plot.title = element_text(hjust = 0.5)) +
