@@ -14,6 +14,7 @@ library(readxl) # It is a tidyverse package, but not a core package. So need to
 #load it separately.
 library(beeswarm)
 library(ggthemes)
+library(grid)
 ```
 
 In this assingment, I will be working to create what I think is a better 
@@ -25,15 +26,15 @@ contains more variables that are not relevent for this assignment.
 Link to riginal data: https://oasishub.co/dataset/usa-tornado-historical-tracks
 -noaa/resource/b2a11100-eac5-4d10-869a-87ba064ede2d
 
-The original visualization of part of this data is two piecharts; one shows the
+The original visualization of part of this data is two pie charts; one shows the
 distribution of the tornadoes by scale and the other shows the distribution of 
-tornado-related deaths, also by tornado scale. The piecharts were used by 
+tornado-related deaths, also by tornado scale. The pie charts were used by 
 'Tornado Project Online' to show that, although tornadoes of scales 4 and 5 are 
 rare, they cause more deaths than all the other tornadoes combined.
 
 Link to the charts: http://www.tornadoproject.com/cellar/fscale.htm 
 
-Below are screenshots of the piecharts as they appeared on the site on 
+Below are screenshots of the pie charts as they appeared on the site on 
 February 7, 2019.
 
 ```{r}
@@ -55,8 +56,8 @@ is finally decided.
 
 The reason I decided to create a better way to visualize the distribution of
 tornadoes and tornado-ralated deaths is because (1) I find it unnessary to use 
-3-D (AND exploded) piecharts and I think a regular one-dimensional piechart is
-better but (2) in general, piecharts can be confusing to interpret and they 
+3-D (AND exploded) pie charts and I think a regular one-dimensional piechart is
+better but (2) in general, pie charts can be confusing to interpret and they 
 don't always present the data in an easily digestible way - it can be hard to 
 keep track of the labels (often there is labelling for percentages and for the 
 different groups involved) and seeing the relationship between the different 
@@ -195,13 +196,13 @@ way, the graph below is already a distribution of tornado scale by death rate.
 I tried different ways to show the relationship between EF and death keeping in
 in mind all the suggestions, and I have not found one that looks better than the
 one below. The ones I have tried looked very weird and hard to interpret. I also
-tried to find a way to put the the information in the piecharts in one graph and
+tried to find a way to put the the information in the pie charts in one graph and
 this was not successful too.
 
 So given the challenges, I decided to just leave both graphs as horizontal bar
 charts for now. Below, the graphs are presented side by side. One can see that 
 as the intensity of a tornado increases (on the left), number of tornadoes decreases,
-but the number of deaths by tornadoes increases. This is what the two piecharts
+but the number of deaths by tornadoes increases. This is what the two 
 were trying to show, but now on bar graphs.
 
 ```{r}
@@ -209,12 +210,13 @@ grid.arrange(tornadoes_plot1, tornadoes_plot2, ncol = 2)
 ```
 
 
-### Edit (February 11):
+#### Edit (February 11):
 
 I was able to figure out how to show all the information in one chart. I grouped
 deaths by EF scale, calculated mean deaths for each scale and plotted EF 
-scale against the mean. This seems like it is what a previous suggestion about
-plotting EF vs death rate meant. Below is the graph.
+scale against its mean. This can also be thought of as deaths per tornado.
+It seems like it is what a previous suggestion about plotting EF vs death rate 
+meant (it is - updated February 20). Below is the graph.
 
 ```{r}
 tornadoes %>%
@@ -232,6 +234,12 @@ tornadoes %>%
   coord_flip()
 ```
 
+Correction: the plot of Average Deaths by Scale above still doesn not show the
+information from both of the pie charts. It is just showing the expected death
+for each tornado given it's EF scale.
+
+While creating the plot, I thought of boxplots. A boxplot could show the same
+information. I tried to plot one.
 
 ```{r}
 ggplot(data = tornadoes) +
@@ -240,21 +248,42 @@ ggplot(data = tornadoes) +
   theme_classic() +
   theme(plot.title = element_text(hjust = 0.5)) +
   scale_x_continuous(breaks = c(0,1,2,3,4,5),
-                     labels = c("EF0", "EF1", "EF2", "EF3", "EF4", "EF5"))
+                     labels = c("EF0", "EF1", "EF2", "EF3", "EF4", "EF5")) + 
+  coord_cartesian(ylim = c(0,30))
+
+#scale_y_continuous(limits = ...) will remove data that fall outside the limits 
+#and then perform the statistical calculations so the mean and other summaries 
+#will be affected. The alternative is to use coord_cartesian(limits = ...) - this 
+#'zooms' in without removing data or affecting the summaries.
 ```
 
+The boxplot above indeed shows the same information. It is however hard to see where
+the means for the lower scales are. I have tried zooming in as much as possible, and
+I can only see two means, for EF4 and EF5.
 
-Actaully these two still do not show both info. The last one though shows both 
-deaths per scale and mean of deaths for each scale - that is, the expecation of 
-number of deaths if an EF 5 hits is about 20 (which is also what the previous 
-one means). 
+To show information from both pie-charts, I will go back to two side by side
+graphs. This time, however, I will use the Average Deaths by Scale and a version
+of the Percentage of Tornadoes by Scale graph. Moreover, the graphs will be
+diverging away from each other - giving a diverging bar chart with a shared central 
+axis. I use the Average Deaths by Scale graph and not Counts of Tornadoe-related 
+Deaths by Scale graph  because  it shows the increasing trend in deaths by 
+tornado scale better. The Average Deaths by Scale graph corrects the problem 
+that a given scale can have more deaths just because there were many tornadoes 
+of that scale.
 
+In the code below, I am re-doing the Percentage of Tornadoes by Scale graph. The
+new graph will not use percentage and will not have numbers stacked on the bar.
+The reason I am changing to counts instead of using percentages is because I think
+the use of percentages (in this particular case) is unnecessary - we can get an
+idea of how the tornadoes are ditributed by EF scale by looking at the size of the
+bars. If one wants to know the exact number of tornadoes of a given scale,
+they can get that information from the y-axis that now has tornado counts.
 
 ```{r}
 tornadoes_left = ggplot(data = tornadoes) + 
   geom_bar(mapping = aes(x = EF), fill = "black") + 
   scale_y_continuous(trans = "reverse") + 
-  labs(title = "Tornado Count by Scale", y = "Tornado Count", x = NULL) + 
+  labs(title = "Tornado Count by Scale", y = "Tornado Count\n", x = NULL) + 
   theme(plot.title = element_text(hjust = 0.5),
         axis.ticks.y = element_blank(),
         axis.text.y = element_blank(),
@@ -262,6 +291,9 @@ tornadoes_left = ggplot(data = tornadoes) +
   coord_flip()
 ```
 
+I am also redoing the Average Deaths by Scale graph just so I can easily merge
+the two graphs later on. For both graphs, I will change fill color just to have
+a combination that works well.
 
 ```{r}
 tornadoes_right <- tornadoes %>%
@@ -270,19 +302,23 @@ tornadoes_right <- tornadoes %>%
   
   ggplot(data = .) +
   geom_bar(aes(x = EF, y = mean_deaths_per_sc), stat = "identity", fill = "red") +
-  labs(x = NULL, y = "Deaths per EF Scale", title = "Average Deaths by Scale") +
+  labs(x = NULL, y = "Deaths per EF Scale\n", title = "Average Deaths by Scale") +
   theme(plot.title = element_text(hjust = 0.5),
         axis.ticks.y = element_blank()) +
   scale_x_continuous(breaks = c(0,1,2,3,4,5),
-                     labels = c("EF0   ", "EF1   ", "EF2   ", "EF3   ", "EF4   ", "EF5   ")) +
+                     labels = c("EF0   ", "EF1   ", "EF2   ", "EF3   ", "EF4   ",
+                                "EF5   ")) +
   coord_flip()
 ```
 
-Merge:
-
+Merging the graphs:
 ```{r}
-grid.arrange(tornadoes_left, tornadoes_right, ncol = 2)
+grid.arrange(tornadoes_left, tornadoes_right, ncol = 2, top = textGrob("\nThough 
+             Fewer, the More Violent Tornadoes Cause More Deaths per Tornado\n", 
+             gp = gpar(fontsize = 15, font = 1)))
 ```
 
+And this will be my final graph for now. It clearly shows the information from
+the two pie charts.
 
 

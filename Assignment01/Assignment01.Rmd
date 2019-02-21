@@ -22,7 +22,7 @@ gs_auth(new_user = TRUE)
 
 To see what's in your google drive use gs_ls().
 
-```{r, include=F}
+```{r}
 quest_res_list <- gs_title("Femmes Questionnaire Responses")
 quest_res_df <- for_gs_sheet <- gs_read(quest_res_list)
 ```
@@ -37,8 +37,9 @@ names(quest_res_df) = c("time_stamp", "num_siblings", "fav_color", "height", "sh
 
 ```{r}
 ggplot(quest_res_df) + 
-  geom_point(aes(x = num_siblings, y = shoe_size)) + 
-  labs(x = "Number of Siblings", y = "Shoe Size")
+  geom_point(aes(x = num_siblings, y = shoe_size)) +
+  labs(title = "Relationship Betweenn Shoe Size and Number of Siblings?", x = "Number of Siblings", y = "Shoe Size") + 
+  theme()
 ```
 
 #### Favorite season
@@ -58,5 +59,8 @@ ggplot(quest_res_df) +
   labs(x = "Favorite Chocolate")
 ```
 
-
 #### etc
+
+- gganimate for the reaction times.
+- change bar colors e.g. have chocolate types matched with different colors. And the favorite colors one - color by color.
+- online shiny course.
