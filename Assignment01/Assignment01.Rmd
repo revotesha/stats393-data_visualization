@@ -38,9 +38,10 @@ View(quest_res_df)
 ```{r}
 ggplot(quest_res_df) + 
   geom_point(aes(x = num_siblings, y = shoe_size)) +
-  labs(title = "Any Relationship Between Shoe Size and Number of Siblings?", x = "Number of Siblings", y = "Shoe Size") + 
-  theme_economist() +
-  theme(plot.title = element_text(hjust = 0.5))
+  geom_smooth(aes(x = num_siblings, y = shoe_size), method = "lm", formula = y ~ x, se = F) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(title = "Any Relationship Between Shoe Size and Number of Siblings?", x = "Number of Siblings", y = "Shoe Size") +
+  theme_economist()
 ```
 
 #### Correlations between shoe size and height?
@@ -48,6 +49,7 @@ ggplot(quest_res_df) +
 ```{r}
 ggplot(quest_res_df) + 
   geom_point(aes(x = shoe_size, y = height)) +
+  geom_smooth(aes(x = num_siblings, y = shoe_size), method = "lm", formula = y ~ x, se = F) +
   labs(title = "Any Relationship Between Shoe Size and Height?", x = "Shoe Size", y = "Height") +
   theme_economist() +
   theme(plot.title = element_text(hjust = 0.5))
@@ -96,6 +98,7 @@ ggplot(quest_res_df) +
   scale_fill_manual(
     values = color_pallete,
     limits = names(color_pallete))
+  #theme_economist()
 ```
 
 
