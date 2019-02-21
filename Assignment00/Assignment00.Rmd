@@ -12,7 +12,6 @@ library(scales)
 library(gridExtra)
 library(readxl) # It is a tidyverse package, but not a core package. So need to 
 #load it separately.
-library(ggthemes)
 library(grid) # in this assignemnt, this works with gridExtra 
 ```
 
@@ -66,7 +65,7 @@ My idea of a better visualization is the use of a bar graph. Below is one that
 shows the percentage of tornadoes by scale.
 ```{r}
 #loading the data.
-tornadoes <- read_xls("tornadoes.xls")
+tornadoes <- read_excel("tornadoes.xls")
 ```
 ```{r}
 ggplot(data = tornadoes) + geom_bar(aes(x = EF))
@@ -143,8 +142,7 @@ grid.arrange(tornadoes_plot, deaths_plot, ncol = 2)
 ```
 
 
-Working on suggestions from Dr. Mine Çentinkaya:
-
+Working on suggestions:
 In the graph below, I flipped the axes to have a horizontal bar graph that is
 better visually and is easier to read. Besides the axes, I also removed 
 unnecessary labels on the now y-axis (after flipping) and added more descriptive 
@@ -312,9 +310,9 @@ tornadoes_right <- tornadoes %>%
 
 Merging the graphs:
 ```{r}
-grid.arrange(tornadoes_left, tornadoes_right, ncol = 2, top = textGrob("\nThough 
-             Fewer, the More Violent Tornadoes Cause More Deaths per Tornado\n", 
-             gp = gpar(fontsize = 15, font = 1)))
+grid.arrange(tornadoes_left, tornadoes_right, ncol = 2, top = textGrob("\n
+Though Fewer, the More Violent Tornadoes Cause More Deaths per Tornado\n",
+gp = gpar(fontsize = 15, font = 1)))
 ```
 
 And this will be my final graph for now. It clearly shows the information from
