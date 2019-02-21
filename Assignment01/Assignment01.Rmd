@@ -77,12 +77,26 @@ ggplot(quest_res_df) +
     limits = names(color_pallete))
 ```
 
-#### idea for reaction time 
-since kids are recording 5 different reaction time trials, I want to see if there is a trend between the reaction time and the number of trials. For example, I noticed that the first trial I did pretty bad, second one I improved and I kept improving but the last two scores were similar.
 
+#### Favorite chocolate:
+```{r}
+color_pallete <- c(
+  "White chocolate" = "papayawhip",
+  "I don't like chocolate" = "indianred1", #arbitrary
+  "Milk chocolate" = "saddlebrown",
+  "Dark chocolate" = "chocolate4"
+)
 
-Not done:
-- gganimate for the reaction times.
+ggplot(quest_res_df) + 
+  geom_bar(aes(x = fav_chocolate, fill = fav_chocolate)) +
+  labs(x = "Favorite Chocolate" , title = "Number of students who prefer a certain type of chocolate") +
+  theme(legend.position = "right",
+        legend.title = element_text(face="bold"),
+        plot.title = element_text(hjust = 0.5)) +
+  scale_fill_manual(
+    values = color_pallete,
+    limits = names(color_pallete))
+```
 
 
 
