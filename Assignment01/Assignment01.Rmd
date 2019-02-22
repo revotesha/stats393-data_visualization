@@ -117,7 +117,7 @@ quest_res_df_narrow = gather(quest_res_df, "reaction_one", "reaction_two", "reac
 ```
 
 ```{r}
-p1 <- ggplot(quest_res_df_narrow) + 
+animated <- ggplot(quest_res_df_narrow) + 
   geom_point(aes(x = time_stamp, y = reaction, color = time_stamp), size = 3) +
   theme(plot.title = element_text(hjust = 0.5)) +
   labs(title = "Reaction times for trial", x = "Student", y = "Reaction times") +
@@ -137,5 +137,5 @@ p1 <- ggplot(quest_res_df_narrow) +
   enter_fade() +
   exit_shrink() +
   ease_aes('sine-in-out')
-p1
+animated
 ```
