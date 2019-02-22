@@ -9,7 +9,10 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(googlesheets)
 library(tidyverse)
+library(gganimate)
 library(ggthemes)
+library(gifski)
+library(png)
 ```
 
 Gmail login info:
@@ -31,7 +34,7 @@ quest_res_df <- for_gs_sheet <- gs_read(quest_res_list)
 Changing column names:
 ```{r}
 names(quest_res_df) = c("time_stamp", "num_siblings", "fav_color", "height", "shoe_size", "movie_genre", "fav_chocolate", "fav_pet", "fav_season", "day_old", "reaction_one", "reaction_two", "reaction_three", "reaction_four")
-View(quest_res_df)
+#View(quest_res_df)
 ```
 
 #### Correlation between shoe number and number of siblings?
@@ -58,7 +61,7 @@ ggplot(quest_res_df) +
 
 #### Your Favorite Color:
 
-```{r}
+```{r, warning=F}
 
 color_pallete <- c(
   "Red" = "red",
@@ -67,6 +70,8 @@ color_pallete <- c(
   "Pink" = "pink",
   "Other" = "gray88" # maybe something else here?
 )
+
+legend_title <- "Color"
 
 ggplot(quest_res_df) + 
   geom_bar(aes(x = fav_color, fill = fav_color)) +
@@ -77,12 +82,13 @@ ggplot(quest_res_df) +
         plot.title = element_text(hjust = 0.5)) +
   scale_fill_manual(
     values = color_pallete,
-    limits = names(color_pallete))
+    limits = names(color_pallete)) +
+    scale_fill_manual(legend_title, values=color_pallete)
 ```
 
 
 #### Favorite chocolate:
-```{r}
+```{r, warning=F}
 color_pallete <- c(
   "White chocolate" = "papayawhip",
   "I don't like chocolate 😬" = "black", #arbitrary
@@ -106,21 +112,30 @@ ggplot(quest_res_df) +
 ```
 
 ```{r}
-quest_res_df = gather(quest_res_df, "reaction_one", "reaction_two", "reaction_three", "reaction_four", key = "trial", value = "reaction")
-View(quest_res_df)
+quest_res_df_narrow = gather(quest_res_df, "reaction_one", "reaction_two", "reaction_three", "reaction_four", key = "trial", value = "reaction")
+#View(quest_res_df_narrow)
 ```
 
 ```{r}
-p1 <- ggplot(quest_res_df) + 
-  geom_point(aes(x = time_stamp, y = reaaction)) +
+p1 <- ggplot(quest_res_df_narrow) + 
+  geom_point(aes(x = time_stamp, y = reaction, color = time_stamp), size = 3) +
   theme(plot.title = element_text(hjust = 0.5)) +
-  labs(title = "Reaction times for different trials", x = "Trial 1", y = "Reaction times") +
-  theme_economist() +
+  labs(title = "Reaction times for trial", x = "Student", y = "Reaction times") +
+  # labs(title = "Reaction times for trial {frame_state}", x = "Student", y = "Reaction times")
+  # we want to make the title so that it changes for each trial but we don't know how to
+  theme_bw() +
+  theme(
+    axis.ticks.x = element_blank(),
+    axis.text.x = element_blank(),
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5)
+  ) +
   transition_states(
-    states = trial, # ? or reaction_one and so on ? 
+    states = trial,  
     transition_length = 3,
     state_length = 2) + 
   enter_fade() +
   exit_shrink() +
   ease_aes('sine-in-out')
+p1
 ```
