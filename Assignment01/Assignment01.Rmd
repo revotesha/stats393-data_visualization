@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(googlesheets)
 library(tidyverse)
+library(ggthemes)
 ```
 
 Gmail login info:
@@ -89,6 +90,8 @@ color_pallete <- c(
   "Dark chocolate" = "chocolate4"
 )
 
+legend_title <- "Type"
+
 ggplot(quest_res_df) + 
   geom_bar(aes(x = fav_chocolate, fill = fav_chocolate)) +
   labs(x = "Chocolate Type" , title = "Your Favorite Chocolate") +
@@ -97,9 +100,27 @@ ggplot(quest_res_df) +
         plot.title = element_text(hjust = 0.5)) +
   scale_fill_manual(
     values = color_pallete,
-    limits = names(color_pallete))
+    limits = names(color_pallete)) +
+    scale_fill_manual(legend_title, values=color_pallete)
   #theme_economist()
 ```
 
+```{r}
+quest_res_df = gather(quest_res_df, "reaction_one", "reaction_two", "reaction_three", "reaction_four", key = "trial", value = "reaction")
+View(quest_res_df)
+```
 
-
+```{r}
+p1 <- ggplot(quest_res_df) + 
+  geom_point(aes(x = time_stamp, y = reaaction)) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(title = "Reaction times for different trials", x = "Trial 1", y = "Reaction times") +
+  theme_economist() +
+  transition_states(
+    states = trial, # ? or reaction_one and so on ? 
+    transition_length = 3,
+    state_length = 2) + 
+  enter_fade() +
+  exit_shrink() +
+  ease_aes('sine-in-out')
+```
