@@ -38,7 +38,6 @@ names(quest_res_df) = c("time_stamp", "num_siblings", "fav_color", "height", "sh
 ```
 
 #### Correlation between shoe number and number of siblings?
-
 ```{r}
 ggplot(quest_res_df) + 
   geom_point(aes(x = num_siblings, y = shoe_size)) +
@@ -60,7 +59,6 @@ ggplot(quest_res_df) +
 ```
 
 #### Your Favorite Color:
-
 ```{r, warning=F}
 
 color_pallete <- c(
@@ -86,7 +84,6 @@ ggplot(quest_res_df) +
     scale_fill_manual(legend_title, values=color_pallete)
 ```
 
-
 #### Favorite chocolate:
 ```{r, warning=F}
 color_pallete <- c(
@@ -98,7 +95,7 @@ color_pallete <- c(
 
 legend_title <- "Type"
 
-ggplot(quest_res_df) + 
+ggplot(quest_res_df) +
   geom_bar(aes(x = fav_chocolate, fill = fav_chocolate)) +
   labs(x = "Chocolate Type" , title = "Your Favorite Chocolate") +
   theme(legend.position = "right",
@@ -116,6 +113,7 @@ quest_res_df_narrow = gather(quest_res_df, "reaction_one", "reaction_two", "reac
 #View(quest_res_df_narrow)
 ```
 
+#### Animated Change in Reaction:
 ```{r}
 animated <- ggplot(quest_res_df_narrow) + 
   geom_point(aes(x = time_stamp, y = reaction, color = time_stamp), size = 3) +
