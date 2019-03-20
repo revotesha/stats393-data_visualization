@@ -1,0 +1,65 @@
+Debugging CLT_mean shiny applet
+
+The bug:
+During applet startup, momentary 'invalid arguments' error messages appear in the
+main panel.
+
+Finding the bug:
+To find the bug, I first considered the error messages. The fact that the errors
+mentioned 'arguments' meant that the cause was coming from how we are passing 
+values to the reactive functions that give the outputs. Moreover, since it
+is the same error being repeated, I knew that it was a single mistake causing it
+and its effect was being propagated throughout the entire applet. Looking at the
+code, the values that are being used repeatedly and more than others are those
+that are being created by renderUI and displayed in the UI. Having narrowed down
+to renderUI and uiOutput as possible causes of the error, I started reading about
+them. I found that, sometimes when using renderUI and uiOutput to dynamically
+populate the user controls, when the applet launches, the user inputs linked to
+renderUI are momentarily non-existent. This seemed like a very good explanation
+of what was happening in the applet.
+
+Fixing the bug:
+To fix the bug, I used req() to check validity of inputs before using them. req()
+check to see if an input is available, and if it is not or if invalid, it prevents
+an error message that would have being displayed as a result. This solution worked.
+The only problem is, since req() also completely stops the execution of the code 
+proceeding it, using req() stops the graphs from being displayed until the user
+clicks on the radio buttons a few times. Other options such as validate() seem to
+be causing the same effect but I could not find a clear reason.
+
+Ask Mine: maybe use a actionbutton (display plots) that uses observeEvent. You say
+something like observeEvent(the inputs{and then the plots.}. Or observeEvent(the 
+inputs{an action button to dislay graphs} The only problem is 
+onbserveEvent only takes on argument. 
+
+
+Other changes:
+There are a few things I changed in the code. These are as follows:
+
+
+1. I added wellPanel() to separate user inputs from the additional information
+on the UI. I thought these appear better separated since thy are not related.
+
+2. I removed all the req() for inputs not created under renderUI. Since there is 
+always a default value for these, I thought using req() on these was unnecessary.
+
+3. I removed the error message that appears when maximum is less than minimum for
+the uniform distribution. Instead of an error message, I made it such that, 
+maximum adjusts automatically whenever minimum is made greater than maximum and
+minimu adjusts automatically whenever maximum is made smaller than minimum. For
+this to work I had to change set the highest possible maximum to 21 instead of 20.
+This is so that there is at least a difference of 1 between maximum and minimum
+when automatically re-adjusting.
+
+Since it takes a few seconds for this automatic change to happen, an erro appears
+for a few seconds after the user sets a minimum that is greater than the maximum.
+To prevent this, I keep the original code that give the more meaningful error
+but change the error message to 'plots reloading ...' and changed the color of
+the text to black instead of red.
+
+4. The last change I made is restyle the title of the CLT graph so that there is
+some space between the title and the frame of the graph.
+
+
+
+
