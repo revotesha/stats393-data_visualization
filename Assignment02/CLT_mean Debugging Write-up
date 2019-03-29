@@ -67,7 +67,7 @@ I changed the function to include req() calls everytime an input was about to be
 used. So, it turns out that, in this case, req() doesn't prevent graphs from
 being drawn.
 
-More additional changes:
+Additional changes:
 1. During meeting, we changed the two sliders for maximum and minimum for the
 uniform distributin to just one slider that gives both maximum and minimum.
 
