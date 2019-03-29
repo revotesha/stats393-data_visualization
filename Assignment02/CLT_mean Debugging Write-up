@@ -27,11 +27,6 @@ proceeding it, using req() stops the graphs from being displayed until the user
 clicks on the radio buttons a few times. Other options such as validate() seem to
 be causing the same effect but I could not find a clear reason.
 
-Ask Mine: maybe use a actionbutton (display plots) that uses observeEvent. You say
-something like observeEvent(the inputs{and then the plots.}. Or observeEvent(the 
-inputs{an action button to dislay graphs} The only problem is 
-onbserveEvent only takes on argument. 
-
 
 Other changes:
 There are a few things I changed in the code. These are as follows:
@@ -60,6 +55,30 @@ the text to black instead of red.
 4. The last change I made is restyle the title of the CLT graph so that there is
 some space between the title and the frame of the graph.
 
+Update:
 
+To fix the problem caused by req(), I changed all req() calls such that an input
+is only required right before it is used. Previously, there was a line that
+required all the inputs from renderUI at once. Everytime I deleted some of the inputs
+from this line, the code would work fine. I then noticed that, the inputs left
+in the line were the same inputs used first in a function that was executing next.
+So, instead of requiring all of the inputs together before the function call,
+I changed the function to include req() calls everytime an input was about to be
+used. So, it turns out that, in this case, req() doesn't prevent graphs from
+being drawn.
 
+More additional changes:
+1. During meeting, we changed the two sliders for maximum and minimum for the
+uniform distributin to just one slider that gives both maximum and minimum.
 
+2. I removed all the definitions of the variables of U and L and the rest of the
+code that depends of these. This is because we no longer need to check if maximum
+is greater than minimum.
+
+3. I included windowTitle = "CLT for means" to have a shorter window name in the
+url.
+
+4. I re-did distribution plots and sampling distribution plot with ggplot2 code.
+This includes some stylistic changes to texts to match the new plots. Shortened title
+of sampling distribution as the information was redundant - there is a similar 
+description right below the graph.
