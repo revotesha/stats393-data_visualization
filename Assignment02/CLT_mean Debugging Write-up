@@ -1,7 +1,7 @@
 Debugging CLT_mean shiny applet
 
 The bug:
-During applet startup, momentary 'invalid arguments' error messages appear in the
+During applet startup, the error message 'invalid arguments' briefly appear in the
 main panel.
 
 Finding the bug:
@@ -9,50 +9,45 @@ To find the bug, I first considered the error messages. The fact that the errors
 mentioned 'arguments' meant that the cause was coming from how we are passing 
 values to the reactive functions that give the outputs. Moreover, since it
 is the same error being repeated, I knew that it was a single mistake causing it
-and its effect was being propagated throughout the entire applet. Looking at the
-code, the values that are being used repeatedly and more than others are those
-that are being created by renderUI and displayed in the UI. Having narrowed down
-to renderUI and uiOutput as possible causes of the error, I started reading about
-them. I found that, sometimes when using renderUI and uiOutput to dynamically
-populate the user controls, when the applet launches, the user inputs linked to
-renderUI are momentarily non-existent. This seemed like a very good explanation
-of what was happening in the applet.
+and its effect was being propagated throughout the applet. Looking at the
+code, the values that are being used repeatedly are those that are being created 
+by renderUI and displayed in the UI. So, I read renderUI and uiOutput and found that, 
+sometimes when using renderUI and uiOutput to dynamically populate the user controls, 
+when the applet launches, the user inputs linked to renderUI are momentarily non-existent.
+So, the bug was potentially caused by renderUI inputs.
 
 Fixing the bug:
-To fix the bug, I used req() to check validity of inputs before using them. req()
-check to see if an input is available, and if it is not or if invalid, it prevents
-an error message that would have being displayed as a result. This solution worked.
+To fix the bug, I used req() to check validity of all renderUI inputs before using
+them. req() check to see if an input is available, and if it is not or if invalid,
+it prevents an error message from being displayed. This solution worked.
 The only problem is, since req() also completely stops the execution of the code 
 proceeding it, using req() stops the graphs from being displayed until the user
 clicks on the radio buttons a few times. Other options such as validate() seem to
-be causing the same effect but I could not find a clear reason.
+be causing the same effect and I could not find a clear reason why.
 
 
 Other changes:
 There are a few things I changed in the code. These are as follows:
 
-
 1. I added wellPanel() to separate user inputs from the additional information
-on the UI. I thought these appear better separated since thy are not related.
+on the user input column. I thought these appear better when separated as thy are 
+not related.
 
-2. I removed all the req() for inputs not created under renderUI. Since there is 
-always a default value for these, I thought using req() on these was unnecessary.
+2. I removed all the req() for inputs not created inside renderUI. There is 
+always a default value for these, so I thought using req() on these was unnecessary.
 
 3. I removed the error message that appears when maximum is less than minimum for
 the uniform distribution. Instead of an error message, I made it such that, 
 maximum adjusts automatically whenever minimum is made greater than maximum and
-minimu adjusts automatically whenever maximum is made smaller than minimum. For
+minimum adjusts automatically whenever maximum is made smaller than minimum. For
 this to work I had to change set the highest possible maximum to 21 instead of 20.
-This is so that there is at least a difference of 1 between maximum and minimum
-when automatically re-adjusting.
 
-Since it takes a few seconds for this automatic change to happen, an erro appears
-for a few seconds after the user sets a minimum that is greater than the maximum.
-To prevent this, I keep the original code that give the more meaningful error
-but change the error message to 'plots reloading ...' and changed the color of
-the text to black instead of red.
+Since it takes a few seconds for this change to happen, an error appears for a few 
+seconds after, for example, the user sets a minimum that is greater than the maximum.
+To hide this, instead of plotting a graph during this time, I put the message 
+'plots reloading ...'. Once the values have been updated, the actual plot displays.
 
-4. The last change I made is restyle the title of the CLT graph so that there is
+4. The last change I made is re-style the title of the CLT graph so that there is
 some space between the title and the frame of the graph.
 
 Update:
@@ -60,7 +55,7 @@ Update:
 To fix the problem caused by req(), I changed all req() calls such that an input
 is only required right before it is used. Previously, there was a line that
 required all the inputs from renderUI at once. Everytime I deleted some of the inputs
-from this line, the code would work fine. I then noticed that, the inputs left
+from this line, the code would work without errors. I noticed that, the inputs left
 in the line were the same inputs used first in a function that was executing next.
 So, instead of requiring all of the inputs together before the function call,
 I changed the function to include req() calls everytime an input was about to be
@@ -69,16 +64,24 @@ being drawn.
 
 Additional changes:
 1. During meeting, we changed the two sliders for maximum and minimum for the
-uniform distributin to just one slider that gives both maximum and minimum.
-
-2. I removed all the definitions of the variables of U and L and the rest of the
-code that depends of these. This is because we no longer need to check if maximum
-is greater than minimum.
+uniform distributin to have just one slider that gives both maximum and minimum.
+This way, there is no need to check if maximum is greater than minimum anymore, so
+I remove all the code that does this.
 
 3. I included windowTitle = "CLT for means" to have a shorter window name in the
 url.
 
-4. I re-did distribution plots and sampling distribution plot with ggplot2 code.
-This includes some stylistic changes to texts to match the new plots. Shortened title
-of sampling distribution as the information was redundant - there is a similar 
+4. I re-did distribution plot and sampling distribution plot with ggplot2 code.
+This includes some stylistic changes to texts to match the new plots. I shortened title
+of sampling distribution as the information was redundant -- there is a similar 
 description right below the graph.
+
+5. I changed the layout of the app to include three tabs. The visulizations are 
+now spread over these tabs. This was a suggestion by my supervisor. I also changed 
+the ordering of the help text in the user input section to shorten the column so 
+it fits the screen. These changes make it easier for the user to see everything in 
+one place without having to scroll up and down.
+
+6. For aesthetics, I added background color for the sample distribution plots to match 
+the rest of the plots in the app and changed fill colors for the rest of the plots.
+
