@@ -71,7 +71,7 @@ I remove all the code that does this.
 3. I included windowTitle = "CLT for means" to have a shorter window name in the
 url.
 
-4. I re-did distribution plot and sampling distribution plot with ggplot2 code.
+4. I re-did all the plot with ggplot2 code.
 This includes some stylistic changes to texts to match the new plots. I shortened title
 of sampling distribution as the information was redundant -- there is a similar 
 description right below the graph.
