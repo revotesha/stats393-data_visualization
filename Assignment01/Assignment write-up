@@ -1,0 +1,23 @@
+
+Assignment 01 Write-up:
+
+The aim of this assignment was to write code that connects to a survey to
+analyse and visualize data that's been provided by the surveyed population.
+To do this, we used Rstudios's R markdown to write the analysis and visualization 
+code and used google forms to gather data.
+
+We started with creating the google form. This contained eight questions targeted at 
+fifth grade girls participating in FEMMES data visualization workshop here at Duke
+University. For variability, these questions gathered both categorical and
+numeric data. We then created a google sheet to store the responses to these questions. 
+In an R markdown file, we implemented the code for analysing and visuazing the survey data.
+In the code, we used a package called googlesheets to link the google sheet with 
+the R markdown file.
+
+For the visualizions, we included two scatter plots to visualize correlation between two
+variables. These two plots were meant to show FEMMES workshop participants the
+the difference betweeen correlated and uncorrelated data. We also included two bar
+plots to show how one can visualize categorical data and also illustrate 
+to students cool things one can do in R, for example changing the color of individual 
+bars to virtually any color one prefers. Lastly, we included one animated plot to
+show students that it is also possible to animate visualizations in R.
