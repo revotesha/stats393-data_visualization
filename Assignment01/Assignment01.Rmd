@@ -19,13 +19,11 @@ Gmail login info:
 
 email - femmesworkshop2019@gmail.com
 password - femmes2019
-
 ```{r, include=F}
 gs_auth(new_user = TRUE)
 ```
 
 To see what's in your google drive use gs_ls().
-
 ```{r}
 quest_res_list <- gs_title("Femmes Questionnaire Responses")
 quest_res_df <- for_gs_sheet <- gs_read(quest_res_list)
@@ -33,13 +31,13 @@ quest_res_df <- for_gs_sheet <- gs_read(quest_res_list)
 
 Changing column names:
 ```{r}
-names(quest_res_df) = c("time_stamp", "num_siblings", "fav_color", "height", "shoe_size", "movie_genre", "fav_chocolate", "fav_pet", "fav_season", "day_old", "reaction_one", "reaction_two", "reaction_three", "reaction_four")
-#View(quest_res_df)
+# names(quest_res_df) = c("time_stamp", "num_siblings", "fav_color", "height", "shoe_size", "movie_genre", "fav_chocolate", "fav_pet", "fav_season", "day_old", "reaction_one", "reaction_two", "reaction_three", "reaction_four")
+View(quest_res_df)
 ```
 
 #### Correlation between shoe number and number of siblings?
 ```{r}
-ggplot(quest_res_df) + 
+ggplot(quest_res_df) +
   geom_point(aes(x = num_siblings, y = shoe_size)) +
   geom_smooth(aes(x = num_siblings, y = shoe_size), method = "lm", formula = y ~ x, se = F) +
   theme(plot.title = element_text(hjust = 0.5)) +
@@ -48,7 +46,6 @@ ggplot(quest_res_df) +
 ```
 
 #### Correlations between shoe size and height?
-
 ```{r}
 ggplot(quest_res_df) + 
   geom_point(aes(x = shoe_size, y = height)) +
@@ -76,12 +73,12 @@ ggplot(quest_res_df) +
   labs(x = "Color", title = "Your Favorite Color") +
   theme_economist() +
   theme(legend.position = "right",
-        legend.title = element_text(face="bold"),
+        legend.title = element_text(face = "bold"),
         plot.title = element_text(hjust = 0.5)) +
   scale_fill_manual(
     values = color_pallete,
     limits = names(color_pallete)) +
-    scale_fill_manual(legend_title, values=color_pallete)
+    scale_fill_manual(legend_title, values = color_pallete)
 ```
 
 #### Favorite chocolate:
