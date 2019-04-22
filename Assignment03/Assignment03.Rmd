@@ -1,0 +1,499 @@
+---
+title: "Creating a Better Visualization"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(learnr)
+library(tidyverse)
+library(scales)
+library(gridExtra)
+library(readxl)
+library(grid)
+library(viridis)
+library(knitr)
+```
+
+## Introduction
+In this tutorial, we will create a (better) visualization for a given data set
+which is a record of tornadoes that have happened in the United States 
+between 1950 and 2015.
+
+[Original data](https://oasishub.co/dataset/usa-tornado-historical-tracks-noaa/resource/b2a11100-eac5-4d10-869a-87ba064ede2d)
+
+The original visualization of part of this data is two pie charts; one shows the
+distribution of the tornadoes by scale and the other shows the distribution of 
+tornado-related deaths, also by tornado scale. The pie charts were used by 
+'Tornado Project Online' to show that, although tornadoes of scales 4 and 5 are 
+rare, they cause more deaths than all the other tornadoes combined.
+
+[See pie charts](http://www.tornadoproject.com/cellar/fscale.htm)
+
+The tornado scale used here is the Enhanced Fujita (EF) scale. The EF scale is
+based on the damage the tornado causes and it ranges from 0 to 5, with 5 being 
+the most violent tornadoes. According to the National Weather Service of the
+United  States, the scale of a tornado is determined by first identifying the 
+appropriate  damage indicators from a list of 28. For the given indicator,
+the degree of  damage is determined from a list of 8. Each degree of damage 
+is assigned a  range of wind speed, and it is from these ranges that the scale
+is finally decided.
+
+The reason I decided to create a better way to visualize the distribution of
+tornadoes and tornado-ralated deaths is because (1) I find it unnessary to use 
+3-D (AND exploded) pie charts and I think a regular one-dimensional piechart is
+better and, (2) in general, pie charts can be confusing to interpret as they 
+don't always present the data in an easily digestible way - it can be hard to 
+keep track of the labels and see the relationship of the sizes of the slices
+across groups (the several piecharts being compared). 
+
+In this tutorial we will find a better way to visualize the data to show the
+intended relationship. We will be working primarily with tidyverse, a collection
+of packages that work very well with tidy data. This package and a few others have
+been loaded  for you, so you will not have to worry about it.
+
+## Our Goal
+
+We're going to go from having to compare these two separate 3D exploded pie charts ...
+![](../Images/piechart_one.png)
+
+![](../Images/piechart_two.png)
+
+... to this.
+
+![](../Images/barchart.png)
+
+
+## Data
+
+To start working with the data, we will need to read it and store it in a variable
+so that it's cached.
+```{r}
+tornadoes = read_excel("../Datasets/tornadoes.xls")
+```
+
+We can view the first 5 rows to see what the data looks like.
+```{r}
+head(tornadoes, n = 5)
+```
+
+We are only interested in two variables, EF and fat. So we may only want to see
+those and not the entire data. EF is the tornado scale described in the introduction
+and fat is fatality rate.
+
+```{r}
+tornadoes %>% select(EF, fat)
+```
+
+The symbol ``%>%`` means 'pass result to'. It is called pipe operator and we will
+be using it extensively in this tutorial. Without it, one would need to write the
+function as ``select(tornadoes, EF, fat)``. Now, based on this, do you think you can
+pipe ``tornadoes %>% select(EF, fat)`` to ``head()`` at the end of the line to 
+display just the five five rows? Try it below!
+
+```{r, exercise = TRUE, question-one, exercise.lines = 10}
+# careful how many arguements go inside head()!
+```
+
+```{r, question-one-solution, echo=FALSE}
+tornadoes %>% select(EF, fat) %>% head(n = 5)
+
+# here are several other ways to do it (with or without the pipe operator)
+head(tornadoes %>% select(EF, fat), n = 5)
+temp = tornadoes %>% select(EF, fat)
+head(temp, n = 5)
+```
+
+## Visualization: Barplots
+
+### Exploration
+
+To recap our aim, we are trying to show how number of deaths by tornadoes 
+varies with the scale of the tornadoe.
+
+Given the nature of the variables, showing this on one single plot will be hard.
+The next best thing we could do is put two plot objects together as one plot.
+
+```{r, question-two, echo=F}
+question(
+  "Why do you think we want to have both graphs in one place? Pick the best answer",
+  answer("To save space"),
+  answer("So it's easier to compare trends", correct = TRUE),
+  answer("So it's fancier"),
+  answer("Because we like long code")
+  )
+```
+
+First we will explore the two variables separately and pick something we can 
+enventually use. There are a limited number of ways to visualize categorical
+variables. In our case, the only ways that make sense for EF are piecharts and
+barplots. Since the website already used piecharts, we will use barplots
+for both variables.
+
+We will be using the ggplot function from ggplot2 for plotting.
+
+```{r}
+ggplot(data = tornadoes, aes(x = EF)) +
+  geom_bar()
+```
+
+Above, we started with a call to ``ggplot()``. This creates space for our graph that we can
+then work on. Inside the function, we specify the data to be used (data has to be in a
+tibble format) and the aesthetics. Aesthetics is what goes inside ``aes()``. It is how you
+map your variables to visual properties of the plot. The plotting itself is done by
+the geom ``geom_bar()``. Try implement a similar plot for number of fatalities, fat. Notice
+that while EF was ordinal (or rather, we will consider it to be), fat is discrete.
+We will therefore want to use a histogram instead of a bargraph. The code has been 
+started for you.
+
+```{r graph-one, exercise = TRUE, echo=FALSE, exercise.lines = 10, warning=FALSE, message=FALSE}
+ggplot(___ , ___) + 
+  ___ +
+  xlim(x = c(-1, 25))
+```
+
+```{r graph-one-solution}
+ggplot(data = tornadoes, aes(x = fat)) + 
+  geom_histogram() +
+  xlim(x = c(-1, 25))
+```
+
+What do you think ``xlim()`` does? Try remove it from you solution and see if there 
+is a difference.
+
+```{r, question-three, echo=F}
+question(
+  "What do you think xlim does?",
+  answer("Calculates the limit of x"),
+  answer("Removes the x-axis label"),
+  answer("Specifies the range of x values", correct = TRUE),
+  answer("Doesn't do anything")
+)
+```
+
+### Set-up
+
+Since each tornado is assigned one scale, our first plot already tells you
+the distribution of tornado by tornado scale. We will need something more similar to this
+for fatalities plot than we have now. To do this, we will first manipulate the data
+a little bit. We will calculate the expectation of deaths for each
+tornado scale. This can also be thought of as the mean number of deaths per
+tornado. To do this, we will have to play with the data a little bit. We will
+group the data by scale (using ``group_by()``) and calculate the mean of ``fat``
+for each group (using ``summarize()``). Partial code for this is provided below.
+Fill in the missing bits using our data and the pipe operator.
+
+```{r include=FALSE}
+deaths_per_sc = tornadoes %>%
+  group_by(EF) %>%
+  summarize(mean_deaths_per_sc = mean(fat))
+```
+
+```{r question-four, exercise = TRUE, exercise.lines = 10}
+deaths_per_sc =  ___  ___
+  group_by(EF) ___
+  summarize(mean_deaths_per_sc = mean(fat))
+```
+
+```{r question-four-solution}
+deaths_per_sc = tornadoes %>%
+  group_by(EF) %>%
+  summarize(mean_deaths_per_sc = mean(fat))
+```
+
+It is worth noting that ``summarize()`` only returns what you grouped by and
+what you are summarizing. So the rest of the data disappears.
+
+```{r, question-five, exercise = TRUE, exercise.lines = 5}
+# write the code to display deaths_per_sc. It will be helpful to see it.
+```
+
+Lets now use ``deaths_per_sc`` to make another barplot. Notice we now need to
+have a different y-axis and not just leave it to R to use count. Complete the code
+and set ``y = mean_deaths_per_sc`` in ``aes()``.
+
+```{r graph-two, exercise = TRUE, exercise.lines = 10}
+___ +
+___(stat = "identity") +
+labs(x = "EF Scale", y = "Deaths per EF Scale", title = "Average Deaths by Scale") +
+theme_classic() +
+theme(plot.title = element_text(hjust = 0.5)) +
+scale_x_continuous(breaks = c(0,1,2,3,4,5),
+                   labels = c("EF0", "EF1", "EF2", "EF3", "EF4", "EF5"))
+```
+
+```{r graph-two-solution}
+ggplot(data = deaths_per_sc, aes(x = EF, y = mean_deaths_per_sc)) +
+geom_bar(stat = "identity") +
+labs(x = "EF Scale", y = "Deaths per EF Scale", title = "Average Deaths by Scale") +
+theme_classic() +
+theme(plot.title = element_text(hjust = 0)) +
+scale_x_continuous(breaks = c(0,1,2,3,4,5),
+                   labels = c("EF0", "EF1", "EF2", "EF3", "EF4", "EF5"))
+```
+
+In the code, ``labs()`` lets us add labels for x and y axes and title for the graph.
+``theme_classic()`` is one of the several themes you can use for your plot. 
+The other theme you have seen is the default ``theme_grey()``. ``theme()`` lets
+you modify or style the axes (labels, ticks, or grid lines etc.), the title and 
+more. It is a way to customize parts of plot that are not dependent on data. 
+In the code above, for example, ``theme(plot.title = element_text(hjust = 0.5))``
+adjusts the hotizontal postion of the plot title to center it. You can add more options
+provided you separate them by commas. ``scale_x_continuous()`` lets us define our
+breaks for x-axis. Other variants of this include ``scale_y_continuous()``, and the
+discrete versions. Type ``?scale_y_discrete`` in your console to learn more.
+
+```{r, question-six, echo=F}
+question(
+  "If we change hjust = 0.5 to hjust = 0, where in the plot do you think the title
+  of the plot will be displayed?",
+  answer("Top-right"),
+  answer("Top-left", correct = TRUE),
+  answer("Bottom-right"),
+  answer("Bottom-left")
+)
+```
+
+```{r graph-three, exercise = TRUE, exercise.lines = 10}
+# using the new functions you've seen in the previous exercise, update the plot
+# for EF. y-axis will be the default count this time. ggplot2 is grouping by EF
+# and count number of tornadoes in each group.
+```
+
+```{r graph-three-solution}
+ggplot(tornadoes, aes(x = EF)) +
+  geom_bar() +
+  labs(title = "Percentage of Tornadoes by Scale", x = "Scale (0 - 5)") + 
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous(breaks = c(0,1,2,3,4,5),
+                     labels = c("EF0", "EF1", "EF2", "EF3", "EF4", "EF5"))
+```
+
+### Putting it together
+
+We will now put the two plots together to have one plot object. The plot object
+is diverging barplots. To get there, we will need to flip the coordinate system for
+both graphs and reverse the direction bars on one, so that the bars for each plot 
+are pointing in the opposite directions. We will call the plot pointing to the right
+``right_plot`` and the other ``left_plot``. The two plots will share the same
+x-axis (which will be vertical after flipping the coordinates), so one will not
+have x-axis label and ticks.
+
+Below is the code for this. Change the theme to ``theme_bw`` and remove the
+grid lines that appear on the plots. After that, change the color to something 
+else for each plot. While trying to remove grid lines, know that a plot may have
+both major and minor grid lines and you need to account for both in your code. You
+will need to use both ``panel.grid.major`` and ``panel.grid.minor``. Set these to
+``element_blank()``.
+
+```{r include=FALSE}
+# right_plot = ggplot(data = deaths_per_sc, aes(x = EF, y = mean_deaths_per_sc)) +
+#   geom_bar(stat = "identity", fill = "deepskyblue4") +
+#   labs(x = NULL, y = "Deaths per EF Scale\n", title = "Average Deaths by Scale") +
+#   theme_bw() +
+#   theme(plot.title = element_text(hjust = 0.5),
+#         panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank()) +
+#   scale_x_continuous(breaks = c(0,1,2,3,4,5),
+#                      labels = c("EF0   ", "EF1   ", "EF2   ", "EF3   ", "EF4   ",
+#                                 "EF5   ")) +
+#   coord_flip()
+# 
+# left_plot = ggplot(data = tornadoes, aes(x = EF)) +
+#   geom_bar(fill = "firebrick4") +
+#   scale_y_continuous(trans = "reverse") +
+#   scale_x_continuous(breaks = NULL) +
+#   labs(title = "Tornado Count by Scale", y = "Tornado Count\n", x = NULL) +
+#   theme_bw() +
+#   theme(plot.title = element_text(hjust = 0.5),
+#         panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank()) +
+#   coord_flip()
+```
+
+```{r prepare-graph-four, exercise = TRUE, exercise.lines = 20}
+right_plot = ggplot(data = deaths_per_sc, aes(x = EF, y = mean_deaths_per_sc)) +
+  geom_bar(stat = "identity", fill = "black") +
+  labs(x = NULL, y = "Deaths per EF Scale\n", title = "Average Deaths by Scale") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous(breaks = c(0,1,2,3,4,5),
+                     labels = c("EF0   ", "EF1   ", "EF2   ", "EF3   ", "EF4   ",
+                                "EF5   ")) +
+  coord_flip()
+
+left_plot = ggplot(data = tornadoes, aes(x = EF)) +
+  geom_bar(fill = "black") +
+  scale_y_continuous(trans = "reverse") +
+  scale_x_continuous(breaks = NULL) +
+  labs(title = "Tornado Count by Scale", y = "Tornado Count\n", x = NULL) + 
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_flip()
+```
+
+```{r prepare-graph-four-solution}
+right_plot = ggplot(data = deaths_per_sc, aes(x = EF, y = mean_deaths_per_sc)) +
+  geom_bar(stat = "identity", fill = "deepskyblue4") +
+  labs(x = NULL, y = "Deaths per EF Scale\n", title = "Average Deaths by Scale") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+  scale_x_continuous(breaks = c(0,1,2,3,4,5),
+                     labels = c("EF0   ", "EF1   ", "EF2   ", "EF3   ", "EF4   ",
+                                "EF5   ")) +
+  coord_flip()
+  
+left_plot = ggplot(data = tornadoes, aes(x = EF)) +
+  geom_bar(fill = "firebrick4") +
+  scale_y_continuous(trans = "reverse") +
+  scale_x_continuous(breaks = NULL) +
+  labs(title = "Tornado Count by Scale", y = "Tornado Count\n", x = NULL) + 
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+  coord_flip()
+```
+
+Play with ``scale_x_continuous()`` a litle bit. What happens if you change the 
+strings in the parameter ``labels``? What happens if you remove the spaces in the
+labels (for example "EF0" instead of "EF     0")?
+
+```{r, question-seven, echo=F}
+question(
+  "Would we want to change the order of the strings in the list 'labels', the
+  parameter for 'scale_x_continuous'?",
+  answer("We could because order doesn't matter"),
+  answer("Order doesn't matter but we want to order them so they match the values in 'breaks'",
+         correct = TRUE),
+  answer("We don't even need that part of code!")
+)
+```
+
+
+``grid.arrange()`` combines the plots. Run the code to generate our final plot
+object. You should re-run this chunk everything you change ``left_plot`` or ``right_plot``.
+
+```{r question-eleven, exercise=TRUE, exercise.setup="prepare-graph-four", exercise.lines=5}
+grid.arrange(left_plot, right_plot, ncol = 2,
+             top = textGrob("Though Fewer, the More Violent Tornadoes \n Cause More Deaths per Tornado\n",
+gp = gpar(fontsize = 10, font = 1)))
+```
+
+## Visualizaton: Piecharts
+
+If you still prefer pie charts, here is a better way to use piecharts with this
+data.
+
+First, we make a data frame containing a column with mean death for each EF scale. 
+Try do this. Hint: we did this when creating a barplot for fatalities.
+
+```{r include=FALSE}
+mean_deaths = tornadoes %>%
+  group_by(EF) %>%
+  summarize(mean_deaths_per_sc = mean(fat)) %>%
+  mutate(EF = as.factor(EF)) #paste0("EF", EF))
+```
+
+```{r question-eight, exercise=TRUE, exercise.lines = 10}
+
+```
+
+```{r question-eight-solution}
+mean_deaths = tornadoes %>%
+  group_by(EF) %>%
+  summarize(mean_deaths_per_sc = mean(fat)) %>%
+  mutate(EF = as.factor(EF)) # we need to change EF to type factor to discretize
+# coloring later on.
+```
+
+We then create another data frame with the number of tornadoes for each scale. 
+This should be somewhat similar to creating expectation of number of fatalities
+for each scale. See if you can figure out the code. We will later need to bind
+the two data frames, so we can't have repeating columns. Use a pipe operator
+and ``select(-EF)`` to remove the column.
+
+```{r include=FALSE}
+n_tornadoes = tornadoes %>%
+  group_by(EF) %>%
+  summarize(num_tornadoes_per_sc = n()) %>%
+  select(-EF)
+```
+
+```{r question-nine, exercise=TRUE, exercise.lines=10}
+
+```
+
+```{r question-nine-solution}
+n_tornadoes = tornadoes %>%
+  group_by(EF) %>%
+  summarize(num_tornadoes_per_sc = n()) %>%
+  select(-EF)
+```
+
+In the code below, we do a column bind on the two data frames. We then change
+the resulting data frame to obtain a long data format. We will gather means and 
+number of tornadoes for each scale into one column and have a corresponding
+column that helps us (or rather, the computer) what those values came from. We will
+call the column with values ``values`` and the other ``quantity``. The columns
+``mean_deaths_per_sc`` and ``num_tornadoes_per_sc`` are coming from ``mean_deaths`` 
+data frame and ``n_tornadoes`` respectively. We then use a mutate function to
+change ``mean_deaths_per_sc`` to ``Average Deaths by Scale`` and ``num_tornadoes_per_sc`` 
+to ``Tornado Count by Scale``. Why do you think we are doing the last step? Hint:
+look at the titles for the pie charts.
+
+```{r}
+both = cbind(mean_deaths, n_tornadoes) %>%
+  gather(quantity, values, mean_deaths_per_sc, num_tornadoes_per_sc) %>%
+  mutate(quantity = ifelse(quantity == "mean_deaths_per_sc",
+                           "Average Deaths by Scale", 
+                           "Tornado Count by Scale"))
+```
+
+```{r question-ten, exercise=TRUE}
+# see what the data frame from the previous code looks like.
+```
+
+Below is the code the generates the pie charts. Read through it and try to
+understand what the different parts do. ``scale_fill_viridis`` is a color palette
+function -- we have five categories we want to color and this picks the colors
+for us. Inside this function, we have set ``discrete`` to ``TRUE`` to discretize
+the colors. If you changed this to ``FALSE``, you would get an error because we
+previously changed ``EF`` to be of type factor.
+
+```{r}
+ggplot(data = both, aes(x = 1, y = values, fill = EF)) +
+  geom_bar(stat = "identity", position = "fill") +
+  coord_polar(theta = "y") +
+  facet_wrap(~quantity) +
+  theme_bw() +
+  scale_fill_viridis(discrete = TRUE) + # could also have used
+  # scale_fill_viridis_d(). d is for discretized values.
+  theme(axis.title = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank())
+```
+
+Unlike on the website, these piecharts are drawn side by side, have colors that 
+match and they share the same legendand. It is easier to compare this way.
+
+## Conclusion
+Compared to the original charts, both results make it easier to compare the 
+number of tornadoes by scale with the number of deaths for each scale. In my
+opinion, the barplots make this even easier as the bars are paired and are back
+to back. One can clearly see that, tornado count is highest for scale EF0 tornadoes,
+but the corresponding bar for deaths per EF scale is negligibly small. The reverse
+is true for EF5.
+
+

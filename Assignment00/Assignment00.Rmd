@@ -36,11 +36,11 @@ Below are screenshots of the pie charts as they appeared on the site on
 February 7, 2019.
 
 ```{r}
-knitr::include_graphics("tornadoesImage01.png", dpi = NA)
+knitr::include_graphics("../Images/piechart_one.png", dpi = NA)
 ```
 
 ```{r}
-knitr::include_graphics("tornadoesImage02.png", dpi = NA)
+knitr::include_graphics("../Images/piechart_two.png", dpi = NA)
 ```
 
 The tornado scale used here is the Enhanced Fujita (EF) scale. The EF scale is
@@ -65,8 +65,9 @@ My idea of a better visualization is the use of a bar graph. Below is one that
 shows the percentage of tornadoes by scale.
 ```{r}
 #loading the data.
-tornadoes <- read_excel("tornadoes.xls")
+tornadoes = read_excel("tornadoes.xls")
 ```
+
 ```{r}
 ggplot(data = tornadoes) + geom_bar(aes(x = EF))
 ```
@@ -298,7 +299,7 @@ tornadoes_right <- tornadoes %>%
   summarize(mean_deaths_per_sc = mean(fat)) %>%
   
   ggplot(data = .) +
-  geom_bar(aes(x = EF, y = mean_deaths_per_sc), stat = "identity", fill = "red") +
+  geom_bar(aes(x = EF, y = mean_deaths_per_sc), stat = "identity", fill = "black") +
   labs(x = NULL, y = "Deaths per EF Scale\n", title = "Average Deaths by Scale") +
   theme(plot.title = element_text(hjust = 0.5),
         axis.ticks.y = element_blank()) +
