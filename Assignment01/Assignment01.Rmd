@@ -5,58 +5,54 @@ date: "2/17/2019"
 output: html_document
 ---
 
-```{r setup, include=FALSE, message=F}
-knitr::opts_chunk$set(echo = TRUE)
-library(googlesheets)
-library(tidyverse)
-library(gganimate)
-library(ggthemes)
-library(gifski)
-library(png)
-```
 
 Gmail login info:
 
 email - femmesworkshop2019@gmail.com
+<br/>
 password - femmes2019
-```{r, include=F}
-gs_auth(new_user = TRUE)
+
+```{r, include=TRUE, message=FALSE, warning=FALSE}
+# gs_auth(new_user = TRUE)
 ```
 
 To see what's in your google drive use gs_ls().
-```{r}
-quest_res_list <- gs_title("Femmes Questionnaire Responses")
-quest_res_df <- for_gs_sheet <- gs_read(quest_res_list)
+```{r, include=TRUE, message=FALSE, warning=FALSE}
+# quest_res_list <- gs_title("Femmes Questionnaire Responses")
+# quest_res_df <- for_gs_sheet <- gs_read(quest_res_list)
+# write.csv(quest_res_df, file = "quest_responses_df.csv")
+quest_responses_df <- read_csv("../Assignment01/quest_responses_df.csv") %>%
+  select(-X1)
 ```
 
 Changing column names:
-```{r}
-# names(quest_res_df) = c("time_stamp", "num_siblings", "fav_color", "height", "shoe_size", "movie_genre", "fav_chocolate", "fav_pet", "fav_season", "day_old", "reaction_one", "reaction_two", "reaction_three", "reaction_four")
-View(quest_res_df)
+```{r, include=TRUE, message=FALSE, warning=FALSE}
+names(quest_responses_df) = c("time_stamp", "num_siblings", "fav_color", "height", "shoe_size", "fav_chocolate", "fav_pet", "fav_season", "day_old") #"reaction_one", "reaction_two", "reaction_three", "reaction_four")
+head(quest_responses_df, n = 10)
 ```
 
 #### Correlation between shoe number and number of siblings?
-```{r}
-ggplot(quest_res_df) +
+```{r, include=TRUE, message=FALSE, warning=FALSE}
+ggplot(quest_responses_df) +
   geom_point(aes(x = num_siblings, y = shoe_size)) +
   geom_smooth(aes(x = num_siblings, y = shoe_size), method = "lm", formula = y ~ x, se = F) +
   theme(plot.title = element_text(hjust = 0.5)) +
   labs(title = "Any Relationship Between Shoe Size and Number of Siblings?", x = "Number of Siblings", y = "Shoe Size") +
-  theme_economist()
+  theme_light()
 ```
 
 #### Correlations between shoe size and height?
-```{r}
-ggplot(quest_res_df) + 
+```{r, include=TRUE, message=FALSE, warning=FALSE}
+ggplot(quest_responses_df) + 
   geom_point(aes(x = shoe_size, y = height)) +
-  geom_smooth(aes(x = num_siblings, y = shoe_size), method = "lm", formula = y ~ x, se = F) +
+  geom_smooth(aes(x = shoe_size, y = height), method = "lm", formula = y ~ x, se = F) +
   labs(title = "Any Relationship Between Shoe Size and Height?", x = "Shoe Size", y = "Height") +
-  theme_economist() +
+  theme_light() +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
 #### Your Favorite Color:
-```{r, warning=F}
+```{r, include=TRUE, message=FALSE, warning=FALSE}
 
 color_pallete <- c(
   "Red" = "red",
@@ -68,10 +64,10 @@ color_pallete <- c(
 
 legend_title <- "Color"
 
-ggplot(quest_res_df) + 
+ggplot(quest_responses_df) + 
   geom_bar(aes(x = fav_color, fill = fav_color)) +
   labs(x = "Color", title = "Your Favorite Color") +
-  theme_economist() +
+  theme_light() +
   theme(legend.position = "right",
         legend.title = element_text(face = "bold"),
         plot.title = element_text(hjust = 0.5)) +
@@ -82,7 +78,7 @@ ggplot(quest_res_df) +
 ```
 
 #### Favorite chocolate:
-```{r, warning=F}
+```{r, include=TRUE, message=FALSE, warning=FALSE}
 color_pallete <- c(
   "White chocolate" = "papayawhip",
   "I don't like chocolate 😬" = "black", #arbitrary
@@ -92,9 +88,10 @@ color_pallete <- c(
 
 legend_title <- "Type"
 
-ggplot(quest_res_df) +
+ggplot(quest_responses_df) +
   geom_bar(aes(x = fav_chocolate, fill = fav_chocolate)) +
   labs(x = "Chocolate Type" , title = "Your Favorite Chocolate") +
+  theme_light() +
   theme(legend.position = "right",
         legend.title = element_text(face="bold"),
         plot.title = element_text(hjust = 0.5)) +
@@ -106,31 +103,31 @@ ggplot(quest_res_df) +
 ```
 
 ```{r}
-quest_res_df_narrow = gather(quest_res_df, "reaction_one", "reaction_two", "reaction_three", "reaction_four", key = "trial", value = "reaction")
-#View(quest_res_df_narrow)
+# quest_responses_df_narrow = gather(quest_responses_df, "reaction_one", "reaction_two", "reaction_three", "reaction_four", key = "trial", value = "reaction")
+# head(quest_responses_df_narrow)
 ```
 
 #### Animated Change in Reaction:
 ```{r}
-animated <- ggplot(quest_res_df_narrow) + 
-  geom_point(aes(x = time_stamp, y = reaction, color = time_stamp), size = 3) +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  labs(title = "Reaction times for trial", x = "Student", y = "Reaction times") +
-  # labs(title = "Reaction times for trial {frame_state}", x = "Student", y = "Reaction times")
-  # we want to make the title so that it changes for each trial but we don't know how to
-  theme_bw() +
-  theme(
-    axis.ticks.x = element_blank(),
-    axis.text.x = element_blank(),
-    legend.position = "none",
-    plot.title = element_text(hjust = 0.5)
-  ) +
-  transition_states(
-    states = trial,  
-    transition_length = 3,
-    state_length = 2) + 
-  enter_fade() +
-  exit_shrink() +
-  ease_aes('sine-in-out')
-animated
+# animated <- ggplot(quest_responses_df_narrow) + 
+#   geom_point(aes(x = time_stamp, y = reaction, color = time_stamp), size = 3) +
+#   theme(plot.title = element_text(hjust = 0.5)) +
+#   labs(title = "Reaction times for trial", x = "Student", y = "Reaction times") +
+#   # labs(title = "Reaction times for trial {frame_state}", x = "Student", y = "Reaction times")
+#   # we want to make the title so that it changes for each trial but we don't know how to
+#   theme_bw() +
+#   theme(
+#     axis.ticks.x = element_blank(),
+#     axis.text.x = element_blank(),
+#     legend.position = "none",
+#     plot.title = element_text(hjust = 0.5)
+#   ) +
+#   transition_states(
+#     states = trial,  
+#     transition_length = 3,
+#     state_length = 2) + 
+#   enter_fade() +
+#   exit_shrink() +
+#   ease_aes('sine-in-out')
+# animated
 ```

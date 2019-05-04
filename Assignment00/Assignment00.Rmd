@@ -26,11 +26,11 @@ Below are screenshots of the pie charts as they appeared on the site on
 February 7, 2019.
 
 ```{r}
-knitr::include_graphics("../Images/piechart_one.png", dpi = NA)
+knitr::include_graphics("../images/piechart_one.png", dpi = NA)
 ```
 
 ```{r}
-knitr::include_graphics("../Images/piechart_two.png", dpi = NA)
+knitr::include_graphics("../images/piechart_two.png", dpi = NA)
 ```
 
 The tornado scale used here is the Enhanced Fujita (EF) scale. The EF scale is
