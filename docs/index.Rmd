@@ -1,5 +1,5 @@
 ---
-title: "Writeup"
+title: "IS Writeup"
 author: "Revo Tesha"
 date: "4/22/2019"
 output: 
@@ -26,6 +26,11 @@ library(ggthemes)
 # library(gifski)
 # library(png)
 ```
+
+## Welcome
+
+This is my final writeup for my independent study, Data Visualization with [Dr.
+Mine Centikaya-Rundel](https://en.wikipedia.org/wiki/Mine_%C3%87etinkaya-Rundel).
 
 ## Case Study 1: A Better Visualization
 
@@ -149,9 +154,15 @@ one place without having to scroll up and down.
 6. For aesthetics, I added background color for the sample distribution plots to match 
 the rest of the plots in the app and changed fill colors for the rest of the plots.
 
-Link to final product: [CLT_mean](openintro.shinyapps.io/CLT_mean)
+Link to final product: [CLT_mean](https://openintro.shinyapps.io/CLT_mean/)
 
-## Case Study 4: Learnr
+## Case Study 4: Learn R Tutorial
 
-Link to final product: [learn tutorial](https://revotesha.shinyapps.io/learnr/)
+For this assigment, I created an R tutorial. This tutorial is guided by my first
+case study. In the tutorial, I explain the code I used for that assingment and 
+let a potential learner practice the code. I also improve the visualizations, so
+the final product(s) for this assignment look slightly different than those in 
+the first assignemtn.
+
+Link to the assignment: [learn tutorial](https://revotesha.shinyapps.io/learnr/)
 

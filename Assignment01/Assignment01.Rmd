@@ -7,16 +7,22 @@ output: html_document
 
 
 Gmail login info:
-
 email - femmesworkshop2019@gmail.com
 <br/>
 password - femmes2019
+
+Although I provide the login information here, I have changed the code slightly
+so that one doesn't have to log in to obtain the data. The code saves the spreadsheet
+as a csv file. Using the data this way, makes some code unnecessary, so that's been
+commented out.
+
+Below is the actual assignment.
 
 ```{r, include=TRUE, message=FALSE, warning=FALSE}
 # gs_auth(new_user = TRUE)
 ```
 
-To see what's in your google drive use gs_ls().
+To see what's in the google drive use gs_ls().
 ```{r, include=TRUE, message=FALSE, warning=FALSE}
 # quest_res_list <- gs_title("Femmes Questionnaire Responses")
 # quest_res_df <- for_gs_sheet <- gs_read(quest_res_list)

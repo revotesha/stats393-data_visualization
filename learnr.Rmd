@@ -7,6 +7,11 @@ output:
 runtime: shiny_prerendered
 ---
 
+```{r include=FALSE}
+# this was used to launch assignment03 found here:
+# https://revotesha.shinyapps.io/learnr
+```
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(learnr)
@@ -65,20 +70,33 @@ been loaded  for you, so you will not have to worry about it.
 
 We're going to go from having to compare these two separate 3D exploded pie charts ...
 
-```{r echo=FALSE, out.width="100%"}
-knitr::include_graphics("/images/piechart_one.png")
+```{r echo=FALSE, out.width="400px", fig.align="center"}
+knitr::include_graphics("/images/piechart_one.png", dpi = 400)
 ```
 
-```{r echo=FALSE, out.width="100%"}
-knitr::include_graphics("/images/piechart_two.png")
+```{r echo=FALSE, out.width="400px", fig.align="center"}
+knitr::include_graphics("/images/piechart_two.png", dpi = 400)
 ```
 
-... to this.
+<br/>
 
-```{r echo=FALSE, out.width="100%"}
-knitr::include_graphics("/images/barchart.png")
+... to having to look at only this here ...
+
+<br/>
+
+```{r echo=FALSE, out.width="400px", fig.align="center"}
+knitr::include_graphics("/images/barchart.png", dpi = 400)
 ```
 
+<br/>
+
+... or, if one still wants pie charts, this here ...
+
+<br/>
+
+```{r echo=FALSE, out.width="400px", fig.align="center"}
+knitr::include_graphics("/images/two_piecharts.png", dpi = 400)
+```
 
 ## Data
 
