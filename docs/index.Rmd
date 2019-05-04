@@ -1,5 +1,5 @@
 ---
-title: "IS Writeup"
+title: "Independet Study Writeup"
 author: "Revo Tesha"
 date: "4/22/2019"
 output: 
@@ -7,6 +7,7 @@ output:
     toc: true
     toc_depth: 2
     toc_float: true
+    theme: lumen
 ---
 
 ```{r setup, include=FALSE}
@@ -29,14 +30,18 @@ library(ggthemes)
 
 ## Welcome
 
-This is my final writeup for my independent study, Data Visualization with [Dr.
+This is my final writeup for my data visualization independent study, [Dr.
 Mine Centikaya-Rundel](https://en.wikipedia.org/wiki/Mine_%C3%87etinkaya-Rundel).
+
+<br/>
 
 ## Case Study 1: A Better Visualization
 
 ```{r child="../Assignment00/Assignment00.Rmd"}
 
 ```
+
+<br/>
 
 ## Case Study 2: Femmes 2019
 
@@ -64,6 +69,8 @@ show students that it is also possible to animate visualizations in R.
 ```{r child="../Assignment01/Assignment01.Rmd"}
 
 ```
+
+<br/>
 
 ## Case Study 3: CLT Debugging
 
@@ -155,6 +162,8 @@ one place without having to scroll up and down.
 the rest of the plots in the app and changed fill colors for the rest of the plots.
 
 Link to final product: [CLT_mean](https://openintro.shinyapps.io/CLT_mean/)
+
+<br/>
 
 ## Case Study 4: Learn R Tutorial
 
