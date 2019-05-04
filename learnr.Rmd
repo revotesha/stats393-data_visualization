@@ -70,12 +70,12 @@ been loaded  for you, so you will not have to worry about it.
 
 We're going to go from having to compare these two separate 3D exploded pie charts ...
 
-```{r echo=FALSE, out.width="400px", fig.align="center"}
-knitr::include_graphics("/images/piechart_one.png", dpi = 400)
+```{r echo=FALSE, out.width="500px", fig.align="center"}
+knitr::include_graphics("www/piechart_one.png", dpi = 500)
 ```
 
-```{r echo=FALSE, out.width="400px", fig.align="center"}
-knitr::include_graphics("/images/piechart_two.png", dpi = 400)
+```{r echo=FALSE, out.width="500px", fig.align="center"}
+knitr::include_graphics("www/piechart_two.png", dpi = 500)
 ```
 
 <br/>
@@ -84,8 +84,8 @@ knitr::include_graphics("/images/piechart_two.png", dpi = 400)
 
 <br/>
 
-```{r echo=FALSE, out.width="400px", fig.align="center"}
-knitr::include_graphics("/images/barchart.png", dpi = 400)
+```{r echo=FALSE, out.width="500px", fig.align="center"}
+knitr::include_graphics("www/barchart.png", dpi = 500)
 ```
 
 <br/>
@@ -94,8 +94,8 @@ knitr::include_graphics("/images/barchart.png", dpi = 400)
 
 <br/>
 
-```{r echo=FALSE, out.width="400px", fig.align="center"}
-knitr::include_graphics("/images/two_piecharts.png", dpi = 400)
+```{r echo=FALSE, out.width="500px", fig.align="center"}
+knitr::include_graphics("www/two_piecharts.png", dpi = 500)
 ```
 
 ## Data
@@ -413,7 +413,7 @@ question(
 the solution code from the previous exercise. If you want, you can copy this code
 and run it in that exercise chunk to have it generate the plots with your changes.
 
-```{r}
+```{r fig.align="center"}
 grid.arrange(left_plot, right_plot, ncol = 2,
              top = textGrob("Though Fewer, the More Violent Tornadoes \n Cause More Deaths per Tornado\n",
 gp = gpar(fontsize = 10, font = 1)))
@@ -500,7 +500,7 @@ for us. Inside this function, we have set ``discrete`` to ``TRUE`` to discretize
 the colors. If you changed this to ``FALSE``, you would get an error because we
 previously changed ``EF`` to be of type factor.
 
-```{r}
+```{r fig.align="center"}
 ggplot(data = both, aes(x = 1, y = values, fill = EF)) +
   geom_bar(stat = "identity", position = "fill") +
   coord_polar(theta = "y") +

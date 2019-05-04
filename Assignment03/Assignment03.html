@@ -57,10 +57,10 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div id="section-our-goal" class="section level2">
 <h2>Our Goal</h2>
 <p>We’re going to go from having to compare these two separate 3D exploded pie charts …</p>
-<p><img src="/images/piechart_one.png" width="100%" /></p>
-<p><img src="/images/piechart_two.png" width="100%" /></p>
+<p><img src="images/piechart_one.png" width="100%" /></p>
+<p><img src="images/piechart_two.png" width="100%" /></p>
 <p>… to this.</p>
-<p><img src="/images/barchart.png" width="100%" /></p>
+<p><img src="images/barchart.png" width="100%" /></p>
 </div>
 <div id="section-data" class="section level2">
 <h2>Data</h2>
@@ -101,14 +101,14 @@ head(temp, n = 5)</code></pre>
 <p>To recap our aim, we are trying to show how number of deaths by tornadoes varies with the scale of the tornadoe.</p>
 <p>Given the nature of the variables, showing this on one single plot will be hard. The next best thing we could do is put two plot objects together as one plot.</p>
 
-<div id="htmlwidget-1d4a57a718193362d7ae" style="width:100%;height:auto;", class = "quiz html-widget">
+<div id="htmlwidget-61fa7bc33be23354f8f6" style="width:100%;height:auto;", class = "quiz html-widget">
 <div class="panel panel-default">
 <div class="panel-body quizArea">
 </div>
 </div>
 </div>
 
-<script type="application/json" data-for="htmlwidget-1d4a57a718193362d7ae">{"x":{"question":"Why do you think we want to have both graphs in one place? Pick the best answer","answers":[{"option":"To save space","correct":false,"message":null},{"option":"So it&#39;s easier to compare trends","correct":true,"message":null},{"option":"So it&#39;s fancier","correct":false,"message":null},{"option":"Because we like long code","correct":false,"message":null}],"label":"question-two","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":false,"json":{"info":{"name":"","main":""},"questions":[{"q":"Why do you think we want to have both graphs in one place? Pick the best answer","a":[{"option":"To save space","correct":false,"message":null},{"option":"So it&#39;s easier to compare trends","correct":true,"message":null},{"option":"So it&#39;s fancier","correct":false,"message":null},{"option":"Because we like long code","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-61fa7bc33be23354f8f6">{"x":{"question":"Why do you think we want to have both graphs in one place? Pick the best answer","answers":[{"option":"To save space","correct":false,"message":null},{"option":"So it&#39;s easier to compare trends","correct":true,"message":null},{"option":"So it&#39;s fancier","correct":false,"message":null},{"option":"Because we like long code","correct":false,"message":null}],"label":"question-two","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":false,"json":{"info":{"name":"","main":""},"questions":[{"q":"Why do you think we want to have both graphs in one place? Pick the best answer","a":[{"option":"To save space","correct":false,"message":null},{"option":"So it&#39;s easier to compare trends","correct":true,"message":null},{"option":"So it&#39;s fancier","correct":false,"message":null},{"option":"Because we like long code","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
 <p>First we will explore the two variables separately and pick something we can enventually use. There are a limited number of ways to visualize categorical variables. In our case, the only ways that make sense for EF are piecharts and barplots. Since the website already used piecharts, we will use barplots for both variables.</p>
 <p>We will be using the ggplot function from ggplot2 for plotting.</p>
 <pre class="r"><code>ggplot(data = tornadoes, aes(x = EF)) +
@@ -128,14 +128,14 @@ head(temp, n = 5)</code></pre>
 </div>
 <p>What do you think <code>xlim()</code> does? Try remove it from you solution and see if there is a difference.</p>
 
-<div id="htmlwidget-16cd2a3818bb1b3b76a7" style="width:100%;height:auto;", class = "quiz html-widget">
+<div id="htmlwidget-da14b0017919ec676d18" style="width:100%;height:auto;", class = "quiz html-widget">
 <div class="panel panel-default">
 <div class="panel-body quizArea">
 </div>
 </div>
 </div>
 
-<script type="application/json" data-for="htmlwidget-16cd2a3818bb1b3b76a7">{"x":{"question":"What do you think xlim does?","answers":[{"option":"Calculates the limit of x","correct":false,"message":null},{"option":"Removes the x-axis label","correct":false,"message":null},{"option":"Specifies the range of x values","correct":true,"message":null},{"option":"Doesn&#39;t do anything","correct":false,"message":null}],"label":"question-three","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":false,"json":{"info":{"name":"","main":""},"questions":[{"q":"What do you think xlim does?","a":[{"option":"Calculates the limit of x","correct":false,"message":null},{"option":"Removes the x-axis label","correct":false,"message":null},{"option":"Specifies the range of x values","correct":true,"message":null},{"option":"Doesn&#39;t do anything","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-da14b0017919ec676d18">{"x":{"question":"What do you think xlim does?","answers":[{"option":"Calculates the limit of x","correct":false,"message":null},{"option":"Removes the x-axis label","correct":false,"message":null},{"option":"Specifies the range of x values","correct":true,"message":null},{"option":"Doesn&#39;t do anything","correct":false,"message":null}],"label":"question-three","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":false,"json":{"info":{"name":"","main":""},"questions":[{"q":"What do you think xlim does?","a":[{"option":"Calculates the limit of x","correct":false,"message":null},{"option":"Removes the x-axis label","correct":false,"message":null},{"option":"Specifies the range of x values","correct":true,"message":null},{"option":"Doesn&#39;t do anything","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="section-set-up" class="section level3">
 <h3>Set-up</h3>
@@ -178,14 +178,14 @@ scale_x_continuous(breaks = c(0,1,2,3,4,5),
 </div>
 <p>In the code, <code>labs()</code> lets us add labels for x and y axes and title for the graph. <code>theme_classic()</code> is one of the several themes you can use for your plot. The other theme you have seen is the default <code>theme_grey()</code>. <code>theme()</code> lets you modify or style the axes (labels, ticks, or grid lines etc.), the title and more. It is a way to customize parts of plot that are not dependent on data. In the code above, for example, <code>theme(plot.title = element_text(hjust = 0.5))</code> adjusts the hotizontal postion of the plot title to center it. You can add more options provided you separate them by commas. <code>scale_x_continuous()</code> lets us define our breaks for x-axis. Other variants of this include <code>scale_y_continuous()</code>, and the discrete versions. Type <code>?scale_y_discrete</code> in your console to learn more.</p>
 
-<div id="htmlwidget-47922f474ecb20ecb685" style="width:100%;height:auto;", class = "quiz html-widget">
+<div id="htmlwidget-64d51277c436090afcee" style="width:100%;height:auto;", class = "quiz html-widget">
 <div class="panel panel-default">
 <div class="panel-body quizArea">
 </div>
 </div>
 </div>
 
-<script type="application/json" data-for="htmlwidget-47922f474ecb20ecb685">{"x":{"question":"If we change hjust = 0.5 to hjust = 0, where in the plot do you think the title\n  of the plot will be displayed?","answers":[{"option":"Top-right","correct":false,"message":null},{"option":"Top-left","correct":true,"message":null},{"option":"Bottom-right","correct":false,"message":null},{"option":"Bottom-left","correct":false,"message":null}],"label":"question-six","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":false,"json":{"info":{"name":"","main":""},"questions":[{"q":"If we change hjust = 0.5 to hjust = 0, where in the plot do you think the title\n  of the plot will be displayed?","a":[{"option":"Top-right","correct":false,"message":null},{"option":"Top-left","correct":true,"message":null},{"option":"Bottom-right","correct":false,"message":null},{"option":"Bottom-left","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-64d51277c436090afcee">{"x":{"question":"If we change hjust = 0.5 to hjust = 0, where in the plot do you think the title\n  of the plot will be displayed?","answers":[{"option":"Top-right","correct":false,"message":null},{"option":"Top-left","correct":true,"message":null},{"option":"Bottom-right","correct":false,"message":null},{"option":"Bottom-left","correct":false,"message":null}],"label":"question-six","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":false,"json":{"info":{"name":"","main":""},"questions":[{"q":"If we change hjust = 0.5 to hjust = 0, where in the plot do you think the title\n  of the plot will be displayed?","a":[{"option":"Top-right","correct":false,"message":null},{"option":"Top-left","correct":true,"message":null},{"option":"Bottom-right","correct":false,"message":null},{"option":"Bottom-left","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
 <div class="tutorial-exercise" data-label="graph-three" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="10">
 <pre class="text"><code># using the new functions you&#39;ve seen in the previous exercise, update the plot
 # for EF. y-axis will be the default count this time. ggplot2 is grouping by EF
@@ -254,14 +254,14 @@ left_plot = ggplot(data = tornadoes, aes(x = EF)) +
 </div>
 <p>Play with <code>scale_x_continuous()</code> a litle bit. What happens if you change the strings in the parameter <code>labels</code>? What happens if you remove the spaces in the labels (for example “EF0” instead of “EF 0”)?</p>
 
-<div id="htmlwidget-4d23795c8170023ae649" style="width:100%;height:auto;", class = "quiz html-widget">
+<div id="htmlwidget-997bb13d34480482fbb1" style="width:100%;height:auto;", class = "quiz html-widget">
 <div class="panel panel-default">
 <div class="panel-body quizArea">
 </div>
 </div>
 </div>
 
-<script type="application/json" data-for="htmlwidget-4d23795c8170023ae649">{"x":{"question":"Would we want to change the order of the strings in the list &#39;labels&#39;, the\n  parameter for &#39;scale_x_continuous&#39;?","answers":[{"option":"We could because order doesn&#39;t matter","correct":false,"message":null},{"option":"Order doesn&#39;t matter but we want to order them so they match the values in &#39;breaks&#39;","correct":true,"message":null},{"option":"We don&#39;t even need that part of code!","correct":false,"message":null}],"label":"question-seven","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":false,"json":{"info":{"name":"","main":""},"questions":[{"q":"Would we want to change the order of the strings in the list &#39;labels&#39;, the\n  parameter for &#39;scale_x_continuous&#39;?","a":[{"option":"We could because order doesn&#39;t matter","correct":false,"message":null},{"option":"Order doesn&#39;t matter but we want to order them so they match the values in &#39;breaks&#39;","correct":true,"message":null},{"option":"We don&#39;t even need that part of code!","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-997bb13d34480482fbb1">{"x":{"question":"Would we want to change the order of the strings in the list &#39;labels&#39;, the\n  parameter for &#39;scale_x_continuous&#39;?","answers":[{"option":"We could because order doesn&#39;t matter","correct":false,"message":null},{"option":"Order doesn&#39;t matter but we want to order them so they match the values in &#39;breaks&#39;","correct":true,"message":null},{"option":"We don&#39;t even need that part of code!","correct":false,"message":null}],"label":"question-seven","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":false,"json":{"info":{"name":"","main":""},"questions":[{"q":"Would we want to change the order of the strings in the list &#39;labels&#39;, the\n  parameter for &#39;scale_x_continuous&#39;?","a":[{"option":"We could because order doesn&#39;t matter","correct":false,"message":null},{"option":"Order doesn&#39;t matter but we want to order them so they match the values in &#39;breaks&#39;","correct":true,"message":null},{"option":"We don&#39;t even need that part of code!","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
 <p><code>grid.arrange()</code> combines the plots. We are going to use the plots generated by the solution code from the previous exercise. If you want, you can copy this code and run it in that exercise chunk to have it generate the plots with your changes.</p>
 <pre class="r"><code>grid.arrange(left_plot, right_plot, ncol = 2,
              top = textGrob(&quot;Though Fewer, the More Violent Tornadoes \n Cause More Deaths per Tornado\n&quot;,

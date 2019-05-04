@@ -5,6 +5,8 @@ account: revotesha
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 908830
-bundleId: 2059382
+bundleId: 2060388
 url: https://revotesha.shinyapps.io/learnr/
-when: 1556949484.18351
+when: 1557003021.11449
+asMultiple: FALSE
+asStatic: FALSE
