@@ -5,16 +5,6 @@ date: "1/31/2019"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
-library(scales)
-library(gridExtra)
-library(readxl) # It is a tidyverse package, but not a core package. So need to 
-#load it separately.
-library(grid) # in this assignemnt, this works with gridExtra 
-```
-
 In this assingment, I will be working to create what I think is a better 
 visualization for a dataset. The dataset I will be working with is a record of
 tornadoes that have happened in the United States between 1950 and 2015. 
@@ -65,7 +55,7 @@ My idea of a better visualization is the use of a bar graph. Below is one that
 shows the percentage of tornadoes by scale.
 ```{r}
 #loading the data.
-tornadoes = read_excel("tornadoes.xls")
+tornadoes = read_excel("../Datasets/tornadoes.xls")
 ```
 
 ```{r}
