@@ -30,7 +30,7 @@ library(ggthemes)
 
 ## Welcome
 
-This is my final writeup for my data visualization independent study, [Dr.
+This is my final writeup for my data visualization independent study with [Dr.
 Mine Centikaya-Rundel](https://en.wikipedia.org/wiki/Mine_%C3%87etinkaya-Rundel).
 
 <br/>
